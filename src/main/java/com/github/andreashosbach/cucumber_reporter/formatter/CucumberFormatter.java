@@ -258,20 +258,20 @@ public final class CucumberFormatter implements EventListener {
 
     private void addStepHTML(TestStep step) {
         switch (step.getResult()) {
-        case "PASSED":
-            out.append("<div class=\"step_passed\">\n");
-            out.append("<p>" + formatStep(step.getSource()) + "</p>\n");
-            break;
-        case "FAILED":
-            out.append("<div class=\"step_failed\">\n");
-            out.append("<button class=\"collapsible_error\">" + formatStep(step.getSource()) + "</button>\n");
-            break;
-        case "SKIPPED":
-            out.append("<div class=\"step_skipped\">\n");
-            out.append("<p>" + formatStep(step.getSource()) + "</p>\n");
-            break;
-        default:
-            throw new IllegalStateException("Unknow result " + step.getResult());
+            case "PASSED":
+                out.append("<div class=\"step_passed\">\n");
+                out.append("<p>" + formatStep(step.getSource()) + "</p>\n");
+                break;
+            case "FAILED":
+                out.append("<div class=\"step_failed\">\n");
+                out.append("<button class=\"collapsible_error\">" + formatStep(step.getSource()) + "</button>\n");
+                break;
+            case "SKIPPED":
+                out.append("<div class=\"step_skipped\">\n");
+                out.append("<p>" + formatStep(step.getSource()) + "</p>\n");
+                break;
+            default:
+                throw new IllegalStateException("Unknow result " + step.getResult());
         }
 
         if (step.getError() != null && !step.getError().equals("null")) {
@@ -314,21 +314,38 @@ public final class CucumberFormatter implements EventListener {
             total += feature.totalScenarios();
             failed += feature.failedScenarios();
         }
+        long angle = (long) (failed / total * 360d);
 
         out.append("<div class=\"overview\">\n");
         out.append("<div class=\"pieContainer\">\n");
         out.append("<div class=\"pieBackground\"></div>\n");
         out.append("<div id=\"pieSlice1\" class=\"hold\"><div class=\"pie\"></div></div>\n");
+        if (angle > 180) {
+            out.append("<div id=\"pieSlice2\" class=\"hold\"><div class=\"pie\"></div></div>\n");
+        }
         out.append("<div class=\"innerCircle\"/>\n");
         out.append("</div>\n");
         out.append("</div>\n");
 
         out.append("<style>\n");
-        out.append("#pieSlice1 .pie {\n");
-        out.append("background-color: red;\n");
-        long angle = (long) (failed / total * 360d);
-        out.append("transform:rotate(" + angle + "deg);\n");
-        out.append("}\n");
+        if (angle <= 180) {
+            out.append("#pieSlice1 .pie {\n");
+            out.append("background-color: red;\n");
+            out.append("transform:rotate(" + angle + "deg);\n");
+            out.append("}\n");
+        } else {
+            out.append("#pieSlice1 .pie {\n");
+            out.append("background-color: red;\n");
+            out.append("transform:rotate(180deg);\n");
+            out.append("}\n");
+            out.append("#pieSlice2 {\n");
+            out.append("transform:rotate(180deg);\n");
+            out.append("}\n");
+            out.append("#pieSlice2 .pie {\n");
+            out.append("background-color: red;\n");
+            out.append("transform:rotate(" + (angle - 180) + "deg);\n");
+            out.append("}\n");
+        }
         out.append("</style>\n");
 
         out.append("<p>Scenarios</p>");
@@ -344,15 +361,15 @@ public final class CucumberFormatter implements EventListener {
 
         String firstWord = tokens[0];
         switch (firstWord.toLowerCase()) {
-        case "given":
-        case "when":
-        case "then":
-            //   case "and":
-            //   case "but":
-            output.append("<span class=\"keyword\">" + firstWord + "</span>");
-            break;
-        default:
-            output.append(firstWord);
+            case "given":
+            case "when":
+            case "then":
+                //   case "and":
+                //   case "but":
+                output.append("<span class=\"keyword\">" + firstWord + "</span>");
+                break;
+            default:
+                output.append(firstWord);
         }
 
         DomainDictionary glossary = DomainDictionary.create(new DictionaryFileReader("/domainDictionary.txt"));
