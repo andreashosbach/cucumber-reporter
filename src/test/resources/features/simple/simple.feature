@@ -1,4 +1,4 @@
-Feature: Very Simple feature
+Feature: Very simple feature
 
   Scenario: Simple Scenario
     Given the status before

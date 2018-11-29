@@ -145,7 +145,7 @@ public final class CucumberFormatter implements EventListener {
         TestScenario scenario = new TestScenario();
         scenario.setName(event.testCase.getName());
 
-        //event.testCase.getTags().forEach((t) -> scenario.addTag(t.getName()));
+        event.testCase.getTags().forEach((t) -> scenario.addTag(t.getName()));
         currentFeature.addScenario(scenario);
         currentScenario = scenario;
     }
@@ -290,10 +290,33 @@ public final class CucumberFormatter implements EventListener {
     }
 
     private void addNavigationHTML() {
+        double total = 0;
+        double failed = 0;
+        for (TestFeature feature : features) {
+            total += feature.totalScenarios();
+            failed += feature.failedScenarios();
+        }
+
         out.append("<div class=\"navigation\">\n");
+        addNavigationOverviewHTML(total, failed);
+        if(failed > 0) {
+            addNavigationFailedHTML();
+        }
+        addNavigationFeatureTree();
+        addNavigationTagTree();
+        out.append("</div>\n");
+    }
 
-        addNavigationOverviewHTML();
+    private void addNavigationTagTree() {
+        out.append("<h3>Tags</h3>\n");
+    }
 
+    private void addNavigationFailedHTML() {
+        out.append("<h3>Failed Scenarios</h3>\n");
+    }
+
+    private void addNavigationFeatureTree() {
+        out.append("<h3>Features</h3>\n");
         out.append("<ul>\n");
         for (TestFeature feature : features) {
             out.append("<li><a href=\"#" + feature.getID() + "\">" + feature.getName() + "</a></li>\n");
@@ -304,16 +327,9 @@ public final class CucumberFormatter implements EventListener {
             out.append("</ul>\n");
         }
         out.append("</ul>\n");
-        out.append("</div>\n");
     }
 
-    private void addNavigationOverviewHTML() {
-        double total = 0;
-        double failed = 0;
-        for (TestFeature feature : features) {
-            total += feature.totalScenarios();
-            failed += feature.failedScenarios();
-        }
+    private void addNavigationOverviewHTML(double total, double failed) {
         long angle = (long) (failed / total * 360d);
 
         out.append("<div class=\"overview\">\n");

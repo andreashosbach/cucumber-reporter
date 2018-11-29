@@ -1,0 +1,242 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="cucumberhtml.css">
+</head>
+<body>
+<div class="header">
+<h1>Test-Report <span class="date">2018.11.29 22:21:11 MEZ</span></h1>
+</div>
+<div class="navigation">
+<div class="overview">
+<div class="pieContainer">
+<div class="pieBackground"></div>
+<div id="pieSlice1" class="hold"><div class="pie"></div></div>
+<div class="innerCircle"/>
+</div>
+</div>
+<style>
+#pieSlice1 .pie {
+background-color: red;
+transform:rotate(45deg);
+}
+</style>
+<p>Scenarios</p><p>total: 8</p><p>passed: 7</p><p>failed: 1</p></div><h3>Failed Scenarios</h3>
+<h3>Features</h3>
+<ul>
+<li><a href="#41b1c53f-17d0-4845-997c-52a2058bd1a2">Full blown feature</a></li>
+<ul>
+<li><a href="#5e040f4c-e25d-4cd5-ad2f-38b5e9e03658">A first scenario</a></li>
+<li><a href="#f35735a0-15db-428f-8fab-3ba2ea52c799">A second scenario</a></li>
+<li><a href="#f27f9499-8e1c-4436-9717-6d65907a7904">A failed scenario</a></li>
+</ul>
+<li><a href="#45db2e9d-1352-459c-96d5-31e2c6e835b5">And a second full blown feature</a></li>
+<ul>
+<li><a href="#b7106637-f195-4f6b-8ede-851f6e329c12">That is an example</a></li>
+</ul>
+<li><a href="#93b8d468-47e2-44d0-b423-63a6368455a2">And a third full blown feature</a></li>
+<ul>
+<li><a href="#94d4ee92-769a-4d73-9253-f9dc62908b55">Next scenario with background</a></li>
+<li><a href="#6086b6ec-ce1b-4e55-8032-ba63bc526b03">Next scenario with background</a></li>
+</ul>
+<li><a href="#d7330b87-82c1-4613-83ed-b695f26cabcd">With an outline</a></li>
+<ul>
+<li><a href="#a8daeca5-2620-4583-b960-eb29311cc5dc">eating</a></li>
+<li><a href="#2779e44a-4988-4e10-b20f-f6abdda363c4">eating</a></li>
+</ul>
+</ul>
+<h3>Tags</h3>
+</div>
+<div class="content">
+<div class="feature">
+<a id="41b1c53f-17d0-4845-997c-52a2058bd1a2"/>
+<h2>Full blown feature</h2>
+<div class="scenario">
+<a id="5e040f4c-e25d-4cd5-ad2f-38b5e9e03658"/>
+<h3>A first scenario<span class="statistics">steps passed: 5 skipped: 0 failed: 0</span>
+<span class="tag">@featureTag</span><span class="tag">@firstTag</span></h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p>And some more</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> the thing happens</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> all is ok</p>
+</div>
+<div class="step_passed">
+<p>And and well</p>
+</div>
+</div>
+<div class="scenario">
+<a id="f35735a0-15db-428f-8fab-3ba2ea52c799"/>
+<h3>A second scenario<span class="statistics">steps passed: 5 skipped: 0 failed: 0</span>
+<span class="tag">@featureTag</span><span class="tag">@secondTag</span><span class="tag">@anotherTag</span></h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p>And some more</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> the thing happens</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> all is ok</p>
+</div>
+<div class="step_passed">
+<p>And and well</p>
+</div>
+</div>
+<div class="scenario_failed">
+<a id="f27f9499-8e1c-4436-9717-6d65907a7904"/>
+<h3>A failed scenario<span class="statistics">steps passed: 3 skipped: 1 failed: 1</span>
+<span class="tag">@featureTag</span></h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p>And some more</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> the thing happens</p>
+</div>
+<div class="step_failed">
+<button class="collapsible_error"><span class="keyword">Then</span> nothing is ok</button>
+<div class="error"><p>java.lang.AssertionError: This failed!<br/>
+	at org.junit.Assert.fail(Assert.java:88)<br/>
+	at com.github.andreashosbach.cucumber_reporter.feature.FeatureSteps.nothingIsOk(FeatureSteps.java:22)<br/>
+	at ✽.nothing is ok(src/test/resources/features/full/full.feature:28)<br/>
+</p></div>
+</div>
+<div class="step_skipped">
+<p>And this is skipped</p>
+</div>
+</div>
+</div>
+<div class="feature">
+<a id="45db2e9d-1352-459c-96d5-31e2c6e835b5"/>
+<h2>And a second full blown feature</h2>
+<div class="scenario">
+<a id="b7106637-f195-4f6b-8ede-851f6e329c12"/>
+<h3>That is an example<span class="statistics">steps passed: 5 skipped: 0 failed: 0</span>
+<span class="tag">@secondFeature</span></h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p>And some more</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> the thing happens</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> all is ok</p>
+</div>
+<div class="step_passed">
+<p>And and well</p>
+</div>
+</div>
+</div>
+<div class="feature">
+<a id="93b8d468-47e2-44d0-b423-63a6368455a2"/>
+<h2>And a third full blown feature</h2>
+<div class="scenario">
+<a id="94d4ee92-769a-4d73-9253-f9dc62908b55"/>
+<h3>Next scenario with background<span class="statistics">steps passed: 6 skipped: 0 failed: 0</span>
+<span class="tag">@secondFeature</span></h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p>And some more</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> the thing happens</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> all is ok</p>
+</div>
+<div class="step_passed">
+<p>And and well</p>
+</div>
+</div>
+<div class="scenario">
+<a id="6086b6ec-ce1b-4e55-8032-ba63bc526b03"/>
+<h3>Next scenario with background<span class="statistics">steps passed: 6 skipped: 0 failed: 0</span>
+<span class="tag">@secondFeature</span></h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Given</span> the status before</p>
+</div>
+<div class="step_passed">
+<p>And some more</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> the thing happens</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> all is ok</p>
+</div>
+<div class="step_passed">
+<p>And and well</p>
+</div>
+</div>
+</div>
+<div class="feature">
+<a id="d7330b87-82c1-4613-83ed-b695f26cabcd"/>
+<h2>With an outline</h2>
+<div class="scenario">
+<a id="a8daeca5-2620-4583-b960-eb29311cc5dc"/>
+<h3>eating<span class="statistics">steps passed: 3 skipped: 0 failed: 0</span>
+</h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> there are <start> cucumbers</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> I eat <eat> cucumbers</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> I should have <left> cucumbers</p>
+</div>
+</div>
+<div class="scenario">
+<a id="2779e44a-4988-4e10-b20f-f6abdda363c4"/>
+<h3>eating<span class="statistics">steps passed: 3 skipped: 0 failed: 0</span>
+</h3>
+<div class="step_passed">
+<p><span class="keyword">Given</span> there are <start> cucumbers</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">When</span> I eat <eat> cucumbers</p>
+</div>
+<div class="step_passed">
+<p><span class="keyword">Then</span> I should have <left> cucumbers</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+var coll = document.getElementsByClassName("collapsible_error");
+var i;
+for (i = 0; i < coll.length; i++) {
+coll[i].addEventListener("click", function () {
+this.classList.toggle("active");
+var content = this.nextElementSibling;
+if (content.style.display === "block") {
+content.style.display = "none";
+} else {
+content.style.display = "block";
+}
+});
+}
+</script>
+</body>
+</html>

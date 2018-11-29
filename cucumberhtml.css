@@ -41,6 +41,15 @@ body {
     margin: 0px;
 }
 
+.navigation h3 {
+    padding: 3px 4px 3px 8px;
+    padding-left: 0px
+    text-decoration: none;
+    color: black;
+    background-color:white;
+    display: block;
+}
+
 .navigation a {
     padding: 3px 4px 3px 8px;
     text-decoration: none;
@@ -144,7 +153,7 @@ body {
     margin-bottom: 20px;
 }
 
-.scenario h3 .tag {
+.tag {
     font-size: 12px;
     font-weight: normal;
     padding: 2px;
