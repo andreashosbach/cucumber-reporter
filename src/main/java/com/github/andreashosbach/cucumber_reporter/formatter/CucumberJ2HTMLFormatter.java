@@ -23,6 +23,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
     private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList("given", "when", "then"));
     private String styleText;
+    private String scriptText;
 
     private final NiceAppendable out;
     private final List<TestFeature> features = new ArrayList<>();
@@ -34,9 +35,15 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         this.out = out;
 
         try {
-            styleText = new String(Files.readAllBytes(Paths.get(getClass().getResource("/cucumberhtml.css").toURI())));
+            styleText = new String(Files.readAllBytes(Paths.get(getClass().getResource("/style.css").toURI())));
         } catch (Exception e) {
             throw new RuntimeException("Failed to load style information: " + e.getMessage());
+        }
+
+        try {
+            scriptText = new String(Files.readAllBytes(Paths.get(getClass().getResource("/scripts.js").toURI())));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load script information: " + e.getMessage());
         }
     }
 
@@ -57,20 +64,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag addBodyHTML() {
-        return body(addHeader(), addNavigationHTML(), addContentHTML(), script(rawHtml(
-                "var coll = document.getElementsByClassName(\"collapsible_error\");\n" +
-                        "var i;\n" +
-                        "for (i = 0; i < coll.length; i++) {" +
-                        "coll[i].addEventListener(\"click\", function () {" +
-                        "this.classList.toggle(\"active\");" +
-                        "var content = this.nextElementSibling;" +
-                        "if (content.style.display === \"block\") {" +
-                        "content.style.display = \"none\";" +
-                        "} else {" +
-                        "content.style.display = \"block\";" +
-                        "}" +
-                        "});" +
-                        "}")), style(rawHtml(styleText)));
+        return body(addHeader(), addNavigationHTML(), addContentHTML(), style(rawHtml(styleText)), script(rawHtml(scriptText)));
     }
 
     private ContainerTag addHeader() {
