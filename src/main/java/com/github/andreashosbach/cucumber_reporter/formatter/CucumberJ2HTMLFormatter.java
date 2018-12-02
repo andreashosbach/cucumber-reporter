@@ -238,7 +238,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         List<String> words = Arrays.asList(source.split(" "));
 
         return p(join(formatKeyWord(step.getKeyword()), " ",
-                each(words.subList(1, words.size()), this::formatDomainWord)));
+                each(words, this::formatDomainWord)));
     }
 
     private DomContent formatKeyWord(String word) {

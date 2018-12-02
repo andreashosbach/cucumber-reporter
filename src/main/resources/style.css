@@ -31,7 +31,7 @@ body {
 
 .navigation {
     height: calc(100% - 70px);
-    width: 200px;
+    width: 250px;
     position: fixed;
     z-index: 1;
     top: 50px; /* same as header height*/
@@ -138,7 +138,7 @@ body {
 }
 
 .content {
-    left: 200px; /* Same as the width of the navigation */
+    left: 250px; /* Same as the width of the navigation */
     top: 50px; /* same as header height + padding*/
     font-size: 18px;
     font-family: sans-serif;
@@ -148,7 +148,7 @@ body {
     position: fixed;
     height: calc(100% - 50px);
     overflow-x: hidden;
-    width: calc(100% - 201px);
+    width: calc(100% - 251px);
 }
 
 .feature {
