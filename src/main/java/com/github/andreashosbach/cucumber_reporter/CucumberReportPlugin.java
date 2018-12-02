@@ -2,6 +2,7 @@ package com.github.andreashosbach.cucumber_reporter;
 
 import com.github.andreashosbach.cucumber_reporter.formatter.CucumberHTMLFormatter;
 import com.github.andreashosbach.cucumber_reporter.formatter.CucumberFormatterEventHandler;
+import com.github.andreashosbach.cucumber_reporter.formatter.CucumberJ2HTMLFormatter;
 import cucumber.api.event.*;
 import cucumber.api.formatter.NiceAppendable;
 
@@ -67,7 +68,7 @@ public final class CucumberReportPlugin implements EventListener {
 
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
     public CucumberReportPlugin(Appendable out) {
-        eventHandler = new CucumberFormatterEventHandler(new CucumberHTMLFormatter(new NiceAppendable(out)));
+        eventHandler = new CucumberFormatterEventHandler(new CucumberJ2HTMLFormatter(new NiceAppendable(out)));
     }
 
     @Override

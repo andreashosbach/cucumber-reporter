@@ -1,6 +1,9 @@
 com\github\andreashosbach\cucumber_reporter\bo\TestScenario.class
-com\github\andreashosbach\cucumber_reporter\dictionary\DictionaryFileReader.class
 com\github\andreashosbach\cucumber_reporter\bo\TestFeature.class
+com\github\andreashosbach\cucumber_reporter\formatter\CucumberFormatterEventHandler.class
+com\github\andreashosbach\cucumber_reporter\formatter\CucumberHTMLFormatter.class
+com\github\andreashosbach\cucumber_reporter\dictionary\DictionaryFileReader.class
 com\github\andreashosbach\cucumber_reporter\dictionary\DictionaryWordProvider.class
+com\github\andreashosbach\cucumber_reporter\formatter\CucumberFormatter.class
+com\github\andreashosbach\cucumber_reporter\formatter\CucumberJ2HTMLFormatter.class
 com\github\andreashosbach\cucumber_reporter\bo\TestStep.class
-com\github\andreashosbach\cucumber_reporter\dictionary\DomainDictionary.class

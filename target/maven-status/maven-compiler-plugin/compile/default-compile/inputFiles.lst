@@ -1,7 +1,11 @@
-C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\formatter\CucumberPrettyFormatter.java
+C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\formatter\CucumberJ2HTMLFormatter.java
+C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\formatter\CucumberFormatter.java
+C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\formatter\CucumberFormatterEventHandler.java
 C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\bo\TestStep.java
 C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\dictionary\DictionaryFileReader.java
 C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\dictionary\DomainDictionary.java
 C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\bo\TestFeature.java
 C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\bo\TestScenario.java
+C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\formatter\CucumberHTMLFormatter.java
 C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\dictionary\DictionaryWordProvider.java
+C:\Users\Andreas\Documents\GitHub\cucumber-reporter\src\main\java\com\github\andreashosbach\cucumber_reporter\CucumberReportPlugin.java

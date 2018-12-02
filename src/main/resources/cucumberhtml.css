@@ -2,7 +2,7 @@ body {
 }
 
 .header {
-    height: 70px;
+    height: 40px;
     width: 100%;
     position: fixed;
     z-index: 1;
@@ -15,15 +15,17 @@ body {
     padding-left: 20px;
     padding-top:10px;
     font-size: 25px;
+    margin: 0px;
 }
 
 .header h1 {
     vertical-align: center;
     margin: 0px;
     padding: 0px;
+    font-size: 25px;
 }
 .header h1 .date {
-    font-size: 20px;
+    font-size: 15px;
     margin-left: 20px;
 }
 
@@ -32,7 +34,7 @@ body {
     width: 200px;
     position: fixed;
     z-index: 1;
-    top: 80px; /* same as header height*/
+    top: 50px; /* same as header height*/
     left: 0;
     font-family: Helvetica;
     background-color: #111;
@@ -48,6 +50,7 @@ body {
     color: black;
     background-color:white;
     display: block;
+    font-size: 18px;
 }
 
 .navigation a {
@@ -59,7 +62,7 @@ body {
 
 .navigation ul {
     list-style-type: none;
-    font-size: 20px;
+    font-size: 15px;
     margin: 0px;
     padding: 0px;
     margin-bottom: 20px;
@@ -67,7 +70,7 @@ body {
 
 .navigation ul ul {
     list-style-type: none;
-    font-size: 15px;
+    font-size: 12px;
     margin-left: 7px;
     padding: 0px;
 }
@@ -81,14 +84,16 @@ body {
     background: white;
     padding: 0px;
     padding-left: 10px;
-    font-size: 15px;
+    font-size: 12px;
+    font-weight:normal;
 }
 
 .step_failed {
     background: red;
     padding: 0px;
     padding-left: 10px;
-    font-size: 15px;
+    font-size: 12px;
+    font-weight:normal;
 }
 
 .step_failed .error {
@@ -96,7 +101,7 @@ body {
     background: bisque;
     padding: 0px;
     padding-left: 10px;
-    font-size: 15px;
+    font-size: 12px;
 }
 
 .step_skipped {
@@ -104,11 +109,12 @@ body {
     color: darkgray;
     padding: 0px;
     padding-left: 10px;
-    font-size: 15px;
+    font-size: 12px;
+    font-weight:normal;
 }
 
 .collapsible_error {
-    font-size: 15px;
+    font-size: 12px;
     background-color: red;
     color: white;
     cursor: pointer;
@@ -122,8 +128,8 @@ body {
 
 .content {
     left: 200px; /* Same as the width of the navigation */
-    top: 80px; /* same as header height + padding*/
-    font-size: 20px;
+    top: 50px; /* same as header height + padding*/
+    font-size: 18px;
     font-family: sans-serif;
     background: white;
     color: black;
@@ -145,16 +151,17 @@ body {
     background: white;
     padding: 10px;
     margin: 0px;
+    font-size:20px
 }
-
 
 .scenario h3 {
     padding-bottom: 0px;
     margin-bottom: 20px;
+    font-size:18px;
 }
 
 .tag {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: normal;
     padding: 2px;
     border-color: black;
@@ -178,8 +185,14 @@ body {
     background: white;
 }
 
+.scenario_failed h3 {
+    padding-bottom: 0px;
+    margin-bottom: 20px;
+    font-size:18px;
+}
+
 .scenario_failed .statistics {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: normal;
     padding: 2px;
     border-color: black;
@@ -192,7 +205,7 @@ body {
 }
 
 .scenario .statistics {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: normal;
     padding: 2px;
     border-color: black;
@@ -226,7 +239,7 @@ p {
 
 .pieContainer {
     left: 110px;
-    top: 110px;
+    top: 80px;
     height: 60px;
     position: fixed;
 }
