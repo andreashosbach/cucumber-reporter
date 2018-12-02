@@ -1,6 +1,5 @@
 package com.github.andreashosbach.cucumber_reporter;
 
-import com.github.andreashosbach.cucumber_reporter.formatter.CucumberHTMLFormatter;
 import com.github.andreashosbach.cucumber_reporter.formatter.CucumberFormatterEventHandler;
 import com.github.andreashosbach.cucumber_reporter.formatter.CucumberJ2HTMLFormatter;
 import cucumber.api.event.*;
