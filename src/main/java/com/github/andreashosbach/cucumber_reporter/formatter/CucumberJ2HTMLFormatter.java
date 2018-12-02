@@ -22,9 +22,11 @@ import static j2html.TagCreator.*;
 
 public class CucumberJ2HTMLFormatter implements CucumberFormatter {
 
-    private NiceAppendable out;
-    private List<TestFeature> features = new ArrayList<>();
-    private DomainDictionary glossary = DomainDictionary.create(new DictionaryFileReader("/domainDictionary.txt"));
+    private final NiceAppendable out;
+    private final List<TestFeature> features = new ArrayList<>();
+    private final DomainDictionary glossary = DomainDictionary.create(new DictionaryFileReader("/domainDictionary.txt"));
+    private Date executionTime;
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
 
     public CucumberJ2HTMLFormatter(NiceAppendable out) {
         this.out = out;
@@ -37,13 +39,14 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
 
     @Override
     public void writeOutput() {
+        executionTime = new Date();
         out.append(html(addHeadHTML(), addBodyHTML()).renderFormatted());
         out.close();
 
     }
 
     private ContainerTag addHeadHTML() {
-        return head();
+        return head(title("Test-Report " + dateFormat.format(executionTime)));
     }
 
     private ContainerTag addBodyHTML() {
@@ -69,13 +72,10 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
                         "}" +
                         "});" +
                         "}")), style(rawHtml(styleText)));
-
-
     }
 
     private ContainerTag addHeader() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
-        return div(h1(join("Test-Report", span(dateFormat.format(new Date())).withClass("date")))).withClass("header");
+        return div(h1(join("Test-Report", span(dateFormat.format(executionTime)).withClass("date")))).withClass("header");
     }
 
     private ContainerTag addNavigationHTML() {

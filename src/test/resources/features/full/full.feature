@@ -1,6 +1,6 @@
 @featureTag
 Feature: Full blown feature
-  Thise is the description of the feature
+  This is the description of the feature
 
   @firstTag
   Scenario: A first scenario
