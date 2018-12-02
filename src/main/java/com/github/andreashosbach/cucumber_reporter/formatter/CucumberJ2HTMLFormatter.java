@@ -75,7 +75,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
 
     private ContainerTag addHeader() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
-        return div(h1(join("TestReport", span(dateFormat.format(new Date())).withClass("date")))).withClass("header");
+        return div(h1(join("Test-Report", span(dateFormat.format(new Date())).withClass("date")))).withClass("header");
     }
 
     private ContainerTag addNavigationHTML() {
@@ -94,7 +94,22 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag addNavFailed() {
-        return h3("Failed");
+        return div(h3("Failed"), ul(li(addFailedFeatureList())));
+    }
+
+    private ContainerTag addFailedFeatureList() {
+        return ul(getScenarios().stream()
+                .filter(s -> !s.hasPassed())
+                .map(s -> li(join(a(s.getName()).withHref("#" + s.getID()))))
+                .toArray(ContainerTag[]::new));
+    }
+
+    private List<TestScenario> getScenarios() {
+        List<TestScenario> scenarios = new ArrayList<>();
+        for (TestFeature feature : features) {
+            scenarios.addAll(feature.getScenarios());
+        }
+        return scenarios;
     }
 
     private ContainerTag addNavFeatures() {
@@ -115,7 +130,12 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
 
     private ContainerTag addNavOverview(double total, double failed) {
         long angle = (long) (failed / total * 360d);
-        return div(addPie(angle), p("Scenarios"), p("total: " + (long) total), p("passed: " + (long) (total - failed)), p("failed: " + (long) failed)).withClass("overview");
+        return div(addPie(angle),
+                p("Scenarios"),
+                p("total: " + (long) total),
+                p("passed: " + (long) (total - failed)),
+                p("failed: " + (long) failed))
+                .withClass("overview");
     }
 
     private ContainerTag addPie(long angle) {
@@ -141,7 +161,9 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
                     "background-color: red;" +
                     "transform:rotate(" + (angle - 180) + "deg);" +
                     "}";
-            return div(div(div().withClass("pie"), style(style)).withClass("hold").withId("pieSlice1"), div(div().withClass("pie"), style(style)).withClass("hold").withId("pieSlice2"));
+            return div(
+                    div(div().withClass("pie"), style(style)).withClass("hold").withId("pieSlice1"),
+                    div(div().withClass("pie"), style(style)).withClass("hold").withId("pieSlice2"));
         }
     }
 
@@ -150,11 +172,19 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag addTestFeature(TestFeature feature) {
-        return div(a().withId(feature.getID()), h2(feature.getName()), each(feature.getScenarios(), this::addScenario)).withClass("feature");
+        return div(a().withId(feature.getID()),
+                h2(feature.getName()),
+                each(feature.getScenarios(), this::addScenario))
+                .withClass("feature");
     }
 
     private ContainerTag addScenario(TestScenario scenario) {
-        ContainerTag scenarioDiv = div(a().withId(scenario.getID()), h3(join(scenario.getName(), addScenarioStatistics(scenario), addScenarioTagsHTML(scenario), each(scenario.getSteps(), this::addStep))));
+        ContainerTag scenarioDiv = div(a().withId(scenario.getID()),
+                h3(join(scenario.getName(),
+                        addScenarioStatistics(scenario),
+                        addScenarioTagsHTML(scenario),
+                        each(scenario.getSteps(), this::addStep))));
+
         if (scenario.getFailedSteps() == 0) {
             scenarioDiv.withClass("scenario");
         } else {
@@ -184,17 +214,18 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
                 return div(formatStep(step)).withClass("step_skipped");
             }
             case "FAILED": {
-                return div(button(formatStep(step)).withClass("collapsible_error"), div(formatText(step.getError())).withClass("error")).withClass("step_failed");
-                //replace  \n with br
+                return div(button(formatStep(step)).withClass("collapsible_error"),
+                        div(formatText(step.getError())).withClass("error"))
+                        .withClass("step_failed");
             }
             default:
                 throw new IllegalStateException("Unknown result type " + step.getResult());
         }
     }
 
-    private UnescapedText formatText(String text){
+    private UnescapedText formatText(String text) {
         List<String> lines = Arrays.asList(text.split("\n"));
-        return join(each(lines, line-> join(line, br()) ));
+        return join(each(lines, line -> join(line, br())));
     }
 
     private ContainerTag formatStep(TestStep step) {
@@ -202,7 +233,8 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         List<String> words = Arrays.asList(source.split(" "));
         String firstWord = words.get(0);
 
-        return p(join(formatKeyWord(firstWord), " ", each(words.subList(1, words.size()), this::formatDomainWord)));
+        return p(join(formatKeyWord(firstWord), " ",
+                each(words.subList(1, words.size()), this::formatDomainWord)));
     }
 
     private DomContent formatKeyWord(String word) {

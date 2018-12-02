@@ -137,7 +137,7 @@ body {
     position: fixed;
     height: calc(100% - 85px);
     overflow-x: hidden;
-    width: calc(100% - 200px);
+    width: calc(100% - 201px);
 }
 
 .feature {
