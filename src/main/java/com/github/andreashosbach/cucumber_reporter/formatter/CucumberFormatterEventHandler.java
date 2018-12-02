@@ -7,10 +7,7 @@ import cucumber.api.HookTestStep;
 import cucumber.api.PickleStepTestStep;
 import cucumber.api.event.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class CucumberFormatterEventHandler{
     private final CucumberFormatter formatter;
@@ -52,12 +49,13 @@ public final class CucumberFormatterEventHandler{
         TestScenario scenario = new TestScenario();
         scenario.setName(event.testCase.getName());
 
-        event.testCase.getTags().forEach((t) -> scenario.addTag(t.getName()));
+        event.testCase.getTags().forEach((t) -> scenario.addTag(t.getName().substring(1)));
         currentFeature.addScenario(scenario);
         currentScenario = scenario;
     }
 
     public void handleTestCaseFinished(TestCaseFinished event) {
+        currentScenario.setDuration(event.result.getDuration());
     }
 
     public void handleTestStepStarted(TestStepStarted event) {
@@ -76,9 +74,11 @@ public final class CucumberFormatterEventHandler{
     }
 
     public void handleWrite(WriteEvent event) {
+        System.out.println("Write: " + event.text);
     }
 
     public void handleEmbed(EmbedEvent event) {
+        System.out.println("Embed: " + Arrays.toString(event.data));
     }
 
     public void handleTestStepFinished(TestStepFinished event) {

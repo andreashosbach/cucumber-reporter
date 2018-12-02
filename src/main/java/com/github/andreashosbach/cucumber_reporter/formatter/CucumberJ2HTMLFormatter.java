@@ -13,23 +13,31 @@ import j2html.tags.UnescapedText;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static j2html.TagCreator.*;
 
 public class CucumberJ2HTMLFormatter implements CucumberFormatter {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+    private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList("given", "when", "then"));
+    private String styleText;
+
     private final NiceAppendable out;
     private final List<TestFeature> features = new ArrayList<>();
     private final DomainDictionary glossary = DomainDictionary.create(new DictionaryFileReader("/domainDictionary.txt"));
     private Date executionTime;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+
 
     public CucumberJ2HTMLFormatter(NiceAppendable out) {
         this.out = out;
+
+        try {
+            styleText = new String(Files.readAllBytes(Paths.get(getClass().getResource("/cucumberhtml.css").toURI())));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load style information: " + e.getMessage());
+        }
     }
 
     @Override
@@ -42,22 +50,13 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         executionTime = new Date();
         out.append(html(addHeadHTML(), addBodyHTML()).renderFormatted());
         out.close();
-
     }
 
     private ContainerTag addHeadHTML() {
-        return head(title("Test-Report " + dateFormat.format(executionTime)));
+        return head(title("Test-Report " + DATE_FORMAT.format(executionTime)));
     }
 
     private ContainerTag addBodyHTML() {
-        // style
-        String styleText;
-        try {
-            styleText = new String(Files.readAllBytes(Paths.get(getClass().getResource("/cucumberhtml.css").toURI())));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         return body(addHeader(), addNavigationHTML(), addContentHTML(), script(rawHtml(
                 "var coll = document.getElementsByClassName(\"collapsible_error\");\n" +
                         "var i;\n" +
@@ -75,7 +74,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag addHeader() {
-        return div(h1(join("Test-Report", span(dateFormat.format(executionTime)).withClass("date")))).withClass("header");
+        return div(h1(join("Test-Report", span(DATE_FORMAT.format(executionTime)).withClass("date")))).withClass("header");
     }
 
     private ContainerTag addNavigationHTML() {
@@ -90,18 +89,33 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag addNavTags() {
-        return h3("Tags");
+        Map<String, List<TestScenario>> tags = new HashMap<>();
+        getScenarios().
+                forEach(s -> s.getTags()
+                        .forEach(t -> {
+                            if (!tags.containsKey(t))
+                                tags.put(t, new ArrayList<>());
+                            tags.get(t).add(s);
+                        }));
+        if (tags.size() > 0) {
+            return div(h3("Tags"),
+                    ul(each(tags.keySet(), tag ->
+                            li(join(p(tag), addScenarioList(tags.get(tag)))))));
+        } else {
+            return div();
+        }
     }
 
     private ContainerTag addNavFailed() {
-        return div(h3("Failed"), ul(li(addFailedFeatureList())));
-    }
-
-    private ContainerTag addFailedFeatureList() {
-        return ul(getScenarios().stream()
-                .filter(s -> !s.hasPassed())
-                .map(s -> li(join(a(s.getName()).withHref("#" + s.getID()))))
-                .toArray(ContainerTag[]::new));
+        List<TestScenario> failedScenarios = getScenarios().stream().filter(s -> !s.hasPassed()).collect(Collectors.toList());
+        if (failedScenarios.size() > 0) {
+            return div(h3("Failed"),
+                    ul(li(ul(failedScenarios.stream()
+                            .map(s -> li(join(a(s.getName()).withHref("#" + s.getID()))))
+                            .toArray(ContainerTag[]::new)))));
+        } else {
+            return div();
+        }
     }
 
     private List<TestScenario> getScenarios() {
@@ -113,18 +127,15 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag addNavFeatures() {
-        return div(h3("Features"), addFeatureList());
+        return div(h3("Features"),
+                ul(each(features, feature ->
+                        li(join(a(feature.getName()).withHref("#" + feature.getID()),
+                                addScenarioList(feature.getScenarios())))
+                )));
     }
 
-    private ContainerTag addFeatureList() {
-        return ul(each(features, feature ->
-                li(join(a(feature.getName()).withHref("#" + feature.getID()), addScenarioList(feature)))
-        ));
-
-    }
-
-    private ContainerTag addScenarioList(TestFeature feature) {
-        return ul(each(feature.getScenarios(), scenario ->
+    private ContainerTag addScenarioList(List<TestScenario> scenarios) {
+        return ul(each(scenarios, scenario ->
                 li(a(scenario.getName()).withHref("#" + scenario.getID()))));
     }
 
@@ -215,7 +226,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
             }
             case "FAILED": {
                 return div(button(formatStep(step)).withClass("collapsible_error"),
-                        div(formatText(step.getError())).withClass("error"))
+                        div(formatErrorText(step.getError())).withClass("error"))
                         .withClass("step_failed");
             }
             default:
@@ -223,7 +234,7 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         }
     }
 
-    private UnescapedText formatText(String text) {
+    private UnescapedText formatErrorText(String text) {
         List<String> lines = Arrays.asList(text.split("\n"));
         return join(each(lines, line -> join(line, br())));
     }
@@ -238,15 +249,10 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private DomContent formatKeyWord(String word) {
-        switch (word.toLowerCase()) {
-            case "given":
-            case "when":
-            case "then":
-                //   case "and":
-                //   case "but":
-                return span(word).withClass("keyword");
-            default:
-                return rawHtml(word);
+        if (KEYWORDS.contains(word)) {
+            return span(word).withClass("keyword");
+        } else {
+            return rawHtml(word);
         }
     }
 

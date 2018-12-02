@@ -9,6 +9,7 @@ public class TestScenario {
     private List<TestStep> steps = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
     private String uID = UUID.randomUUID().toString();
+    private long duration;
 
     public long getFailedSteps(){
         return steps.stream().filter((s) -> s.getResult().equals("FAILED")).count();
@@ -52,5 +53,13 @@ public class TestScenario {
 
     public List<String> getTags(){
         return tags;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public long getDuration(){
+        return duration;
     }
 }

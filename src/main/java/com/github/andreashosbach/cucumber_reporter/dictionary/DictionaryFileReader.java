@@ -7,7 +7,7 @@ import java.util.List;
 public class DictionaryFileReader implements DictionaryWordProvider {
 
     private List<String> words = new LinkedList<>();
-    int index;
+    private int index;
 
     public DictionaryFileReader(String filename) {
         try (InputStream in = getClass().getResourceAsStream(filename)) {
