@@ -1,11 +1,11 @@
 Feature: With an outline
 
-  Scenario Outline: eating
+  Scenario Outline: Eating while <title>
     Given there are <start> cucumbers
     When I eat <eat> cucumbers
     Then I should have <left> cucumbers
 
     Examples:
-      | start | eat | left |
-      |    12 |   5 |    7 |
-      |    20 |   5 |   15 |
+      | title  | start | eat | left |
+      | full   |    12 |   2 |   11 |
+      | hungry |    20 |  10 |   10 |

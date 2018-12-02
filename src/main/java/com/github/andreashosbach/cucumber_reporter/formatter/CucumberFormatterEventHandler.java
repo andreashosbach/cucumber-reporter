@@ -63,7 +63,9 @@ public final class CucumberFormatterEventHandler{
         if (event.testStep instanceof PickleStepTestStep) {
             PickleStepTestStep testStep = (PickleStepTestStep) event.testStep;
             step.setSource(currentTestSource.get(testStep.getStepLine() - 1));
+            step.setText(testStep.getPickleStep().getText());
             currentScenario.addStep(step);
+            System.out.println(((PickleStepTestStep) event.testStep).getPickleStep().getText());
         } else if (event.testStep instanceof HookTestStep) {
             HookTestStep hookTestStep = (HookTestStep) event.testStep;
             step.setSource(hookTestStep.getHookType().name());

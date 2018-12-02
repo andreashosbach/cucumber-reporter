@@ -234,16 +234,15 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     }
 
     private ContainerTag formatStep(TestStep step) {
-        String source = step.getSource();
+        String source = step.getText();
         List<String> words = Arrays.asList(source.split(" "));
-        String firstWord = words.get(0);
 
-        return p(join(formatKeyWord(firstWord), " ",
+        return p(join(formatKeyWord(step.getKeyword()), " ",
                 each(words.subList(1, words.size()), this::formatDomainWord)));
     }
 
     private DomContent formatKeyWord(String word) {
-        if (KEYWORDS.contains(word)) {
+        if (KEYWORDS.contains(word.toLowerCase())) {
             return span(word).withClass("keyword");
         } else {
             return rawHtml(word);

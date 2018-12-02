@@ -2,6 +2,7 @@ package com.github.andreashosbach.cucumber_reporter.bo;
 
 public class TestStep {
     private String source;
+    private String text;
     private String result;
     private String error;
 
@@ -27,5 +28,17 @@ public class TestStep {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getText(){
+        return text;
+    }
+
+    public String getKeyword(){
+        return source.split(" ")[0].trim();
     }
 }
