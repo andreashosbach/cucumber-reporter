@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TestScenario {
+public class TestCase {
     private String name;
     private List<TestStep> steps = new ArrayList<>();
     private List<String> tags = new ArrayList<>();

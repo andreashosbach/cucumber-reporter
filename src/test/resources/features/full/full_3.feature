@@ -1,9 +1,10 @@
 @secondFeature
 Feature: And a third full blown feature
-  Thise is the description of the feature
+  This is the description of the feature
+  And a second description line
 
   Background:
-    Given the status before
+    Given nothing is ok
 
   Scenario: Next scenario with background
     Description of the next scenario

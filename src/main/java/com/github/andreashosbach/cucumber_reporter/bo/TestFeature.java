@@ -7,7 +7,8 @@ import java.util.UUID;
 public class TestFeature {
     private String uri;
     private String name;
-    private List<TestScenario> scenarios = new ArrayList<>();
+    private String description;
+    private List<TestCase> testCases = new ArrayList<>();
     private String uID = UUID.randomUUID().toString();
 
 
@@ -27,23 +28,31 @@ public class TestFeature {
         this.name = name;
     }
 
-    public void addScenario(TestScenario scenario){
-        this.scenarios.add(scenario);
+    public void addTestCase(TestCase testCase){
+        this.testCases.add(testCase);
     }
 
-    public List<TestScenario> getScenarios(){
-        return scenarios;
+    public List<TestCase> getTestCases(){
+        return testCases;
     }
 
     public String getID() {
         return uID;
     }
 
-    public long totalScenarios(){
-        return scenarios.size();
+    public long totalTestCases(){
+        return testCases.size();
     }
 
-    public long failedScenarios(){
-        return scenarios.stream().filter((s) -> !s.hasPassed()).count();
+    public long failedTestCases(){
+        return testCases.stream().filter((s) -> !s.hasPassed()).count();
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public String getDescription(){
+        return description;
     }
 }

@@ -1,7 +1,7 @@
 package com.github.andreashosbach.cucumber_reporter.formatter;
 
 import com.github.andreashosbach.cucumber_reporter.bo.TestFeature;
-import com.github.andreashosbach.cucumber_reporter.bo.TestScenario;
+import com.github.andreashosbach.cucumber_reporter.bo.TestCase;
 import com.github.andreashosbach.cucumber_reporter.bo.TestStep;
 import com.github.andreashosbach.cucumber_reporter.dictionary.DictionaryFileReader;
 import com.github.andreashosbach.cucumber_reporter.dictionary.DomainDictionary;
@@ -75,16 +75,16 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         double total = 0;
         double failed = 0;
         for (TestFeature feature : features) {
-            total += feature.totalScenarios();
-            failed += feature.failedScenarios();
+            total += feature.totalTestCases();
+            failed += feature.failedTestCases();
         }
 
         return div(addNavOverview(total, failed), addNavFailed(), addNavFeatures(), addNavTags()).withClass("navigation");
     }
 
     private ContainerTag addNavTags() {
-        Map<String, List<TestScenario>> tags = new HashMap<>();
-        getScenarios().
+        Map<String, List<TestCase>> tags = new HashMap<>();
+        getTestCases().
                 forEach(s -> s.getTags()
                         .forEach(t -> {
                             if (!tags.containsKey(t))
@@ -94,17 +94,17 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         if (tags.size() > 0) {
             return div(h3("Tags"),
                     ul(each(tags.keySet(), tag ->
-                            li(join(p(tag), addScenarioList(tags.get(tag)))))));
+                            li(join(p(tag), addTestCaseList(tags.get(tag)))))));
         } else {
             return div();
         }
     }
 
     private ContainerTag addNavFailed() {
-        List<TestScenario> failedScenarios = getScenarios().stream().filter(s -> !s.hasPassed()).collect(Collectors.toList());
-        if (failedScenarios.size() > 0) {
+        List<TestCase> failedTestCases = getTestCases().stream().filter(s -> !s.hasPassed()).collect(Collectors.toList());
+        if (failedTestCases.size() > 0) {
             return div(h3("Failed"),
-                    ul(li(ul(failedScenarios.stream()
+                    ul(li(ul(failedTestCases.stream()
                             .map(s -> li(join(a(s.getName()).withHref("#" + s.getID()))))
                             .toArray(ContainerTag[]::new)))));
         } else {
@@ -112,31 +112,31 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
         }
     }
 
-    private List<TestScenario> getScenarios() {
-        List<TestScenario> scenarios = new ArrayList<>();
+    private List<TestCase> getTestCases() {
+        List<TestCase> testCases = new ArrayList<>();
         for (TestFeature feature : features) {
-            scenarios.addAll(feature.getScenarios());
+            testCases.addAll(feature.getTestCases());
         }
-        return scenarios;
+        return testCases;
     }
 
     private ContainerTag addNavFeatures() {
         return div(h3("Features"),
                 ul(each(features, feature ->
                         li(join(a(feature.getName()).withHref("#" + feature.getID()),
-                                addScenarioList(feature.getScenarios())))
+                                addTestCaseList(feature.getTestCases())))
                 )));
     }
 
-    private ContainerTag addScenarioList(List<TestScenario> scenarios) {
-        return ul(each(scenarios, scenario ->
-                li(a(scenario.getName()).withHref("#" + scenario.getID()))));
+    private ContainerTag addTestCaseList(List<TestCase> testCases) {
+        return ul(each(testCases, t ->
+                li(a(t.getName()).withHref("#" + t.getID()))));
     }
 
     private ContainerTag addNavOverview(double total, double failed) {
         long angle = (long) (failed / total * 360d);
         return div(addPie(angle),
-                p("Scenarios"),
+                p("Test Cases"),
                 p("total: " + (long) total),
                 p("passed: " + (long) (total - failed)),
                 p("failed: " + (long) failed))
@@ -179,34 +179,40 @@ public class CucumberJ2HTMLFormatter implements CucumberFormatter {
     private ContainerTag addTestFeature(TestFeature feature) {
         return div(a().withId(feature.getID()),
                 h2(feature.getName()),
-                each(feature.getScenarios(), this::addScenario))
+                formatMultiLineText(feature.getDescription()),
+                each(feature.getTestCases(), this::addTestCase))
                 .withClass("feature");
     }
 
-    private ContainerTag addScenario(TestScenario scenario) {
-        ContainerTag scenarioDiv = div(a().withId(scenario.getID()),
-                h3(join(scenario.getName(),
-                        addScenarioStatistics(scenario),
-                        addScenarioTagsHTML(scenario),
-                        each(scenario.getSteps(), this::addStep))));
+    private ContainerTag formatMultiLineText(String text) {
+        List<String> lines = Arrays.asList(text.split("\n"));
+        return p(each(lines, l -> join(l, br())));
+    }
 
-        if (scenario.getFailedSteps() == 0) {
-            scenarioDiv.withClass("scenario");
+    private ContainerTag addTestCase(TestCase testCase) {
+        ContainerTag testCaseDiv = div(a().withId(testCase.getID()),
+                h3(join(testCase.getName(),
+                        addTestCaseStatistics(testCase),
+                        addTestCaseTagsHTML(testCase))),
+                each(testCase.getSteps(), this::addStep));
+
+        if (testCase.getFailedSteps() == 0) {
+            testCaseDiv.withClass("testcase_success");
         } else {
-            scenarioDiv.withClass("scenario_failed");
+            testCaseDiv.withClass("testcase_failed");
         }
 
-        return scenarioDiv;
+        return testCaseDiv;
     }
 
-    private ContainerTag addScenarioStatistics(TestScenario scenario) {
-        return span("steps passed: " + scenario.getPassedSteps() +
-                " skipped: " + scenario.getSkippedSteps() +
-                " failed: " + scenario.getFailedSteps()).withClass("statistics");
+    private ContainerTag addTestCaseStatistics(TestCase testCase) {
+        return span("steps passed: " + testCase.getPassedSteps() +
+                " skipped: " + testCase.getSkippedSteps() +
+                " failed: " + testCase.getFailedSteps()).withClass("statistics");
     }
 
-    private ContainerTag addScenarioTagsHTML(TestScenario scenario) {
-        return span(each(scenario.getTags(), tag -> span(tag).withClass("tag")));
+    private ContainerTag addTestCaseTagsHTML(TestCase testCase) {
+        return span(each(testCase.getTags(), tag -> span(tag).withClass("tag")));
     }
 
     private ContainerTag addStep(TestStep step) {

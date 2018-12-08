@@ -1,7 +1,7 @@
 package com.github.andreashosbach.cucumber_reporter.formatter;
 
 import com.github.andreashosbach.cucumber_reporter.bo.TestFeature;
-import com.github.andreashosbach.cucumber_reporter.bo.TestScenario;
+import com.github.andreashosbach.cucumber_reporter.bo.TestCase;
 import com.github.andreashosbach.cucumber_reporter.bo.TestStep;
 import cucumber.api.HookTestStep;
 import cucumber.api.PickleStepTestStep;
@@ -9,7 +9,7 @@ import cucumber.api.event.*;
 
 import java.util.*;
 
-public final class CucumberFormatterEventHandler{
+public final class CucumberFormatterEventHandler {
     private final CucumberFormatter formatter;
 
     private Map<String, List<String>> testSources = new HashMap<>();
@@ -17,7 +17,7 @@ public final class CucumberFormatterEventHandler{
 
     private List<String> currentTestSource;
     private TestFeature currentFeature;
-    private TestScenario currentScenario;
+    private TestCase currentTestCase;
     private TestStep currentStep;
 
     public CucumberFormatterEventHandler(CucumberFormatter formatter) {
@@ -41,21 +41,51 @@ public final class CucumberFormatterEventHandler{
         if (currentFeature == null || !event.testCase.getUri().equals(currentFeature.getUri())) {
             TestFeature feature = new TestFeature();
             feature.setName(featureNames.get(event.testCase.getUri()));
+            feature.setDescription(getFeatureDescription(event.testCase.getUri()));
             feature.setUri(event.testCase.getUri());
             formatter.addFeature(feature);
             currentFeature = feature;
         }
 
-        TestScenario scenario = new TestScenario();
-        scenario.setName(event.testCase.getName());
+        TestCase testCase = new TestCase();
+        testCase.setName(event.testCase.getName());
 
-        event.testCase.getTags().forEach((t) -> scenario.addTag(t.getName().substring(1)));
-        currentFeature.addScenario(scenario);
-        currentScenario = scenario;
+        event.testCase.getTags().forEach((t) -> testCase.addTag(t.getName().substring(1)));
+        currentFeature.addTestCase(testCase);
+        currentTestCase = testCase;
+    }
+
+    public String getFeatureDescription(String uri) {
+        List<String> source = testSources.get(uri);
+
+        //find line with Feature:
+        //get all lines that are not commented until: "Scenario:" "Scenario Outline:" "Background:"
+        int pos = 0;
+        while (pos < source.size() && !source.get(pos).trim().startsWith("Feature:")) {
+            pos++;
+        }
+        pos++;
+
+        String description = "";
+        while (pos < source.size() && !startsWithKeyword(source.get(pos))) {
+            if (!isComment(source.get(pos)) && !source.get(pos).isEmpty())
+                description += source.get(pos) + "\n";
+            pos++;
+        }
+        return description;
+    }
+
+    boolean startsWithKeyword(String line) {
+        String l = line.trim();
+        return l.startsWith("Scenario:") || l.startsWith("Example:") || l.startsWith("Background:") || l.startsWith("Scenario Outline:") || l.startsWith("@");
+    }
+
+    boolean isComment(String line) {
+        return line.trim().startsWith("#");
     }
 
     public void handleTestCaseFinished(TestCaseFinished event) {
-        currentScenario.setDuration(event.result.getDuration());
+        currentTestCase.setDuration(event.result.getDuration());
     }
 
     public void handleTestStepStarted(TestStepStarted event) {
@@ -64,13 +94,13 @@ public final class CucumberFormatterEventHandler{
             PickleStepTestStep testStep = (PickleStepTestStep) event.testStep;
             step.setSource(currentTestSource.get(testStep.getStepLine() - 1));
             step.setText(testStep.getPickleStep().getText());
-            currentScenario.addStep(step);
-            System.out.println(((PickleStepTestStep) event.testStep).getPickleStep().getText());
+            currentTestCase.addStep(step);
         } else if (event.testStep instanceof HookTestStep) {
             HookTestStep hookTestStep = (HookTestStep) event.testStep;
             step.setSource(hookTestStep.getHookType().name());
+            System.out.println("Hook" + hookTestStep.getHookType().name());
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Unknown step type");
         }
         currentStep = step;
     }

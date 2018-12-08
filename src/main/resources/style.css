@@ -165,10 +165,10 @@ body {
     font-size:20px
 }
 
-.scenario h3 {
-    padding-bottom: 0px;
-    margin-bottom: 20px;
-    font-size:18px;
+.feature p {
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 10px;
 }
 
 .tag {
@@ -184,38 +184,49 @@ body {
     margin-left: 10px;
 }
 
-.scenario {
+.testcase_success {
     padding-bottom: 40px;
     padding-left: 10px;
     background: white;
 }
 
-.scenario_failed {
-    margin-bottom: 40px;
-    padding-left: 10px;
-    background: white;
-}
-
-.scenario_failed h3 {
+.testcase_success h3 {
     padding-bottom: 0px;
     margin-bottom: 20px;
     font-size:18px;
 }
 
-.scenario_failed .statistics {
-    font-size: 10px;
-    font-weight: normal;
-    padding: 2px;
-    border-color: black;
-    border-style: solid;
-    border-radius: 5px;
-    border-width: 1px;
-    background: red;
-    color: white;
-    margin-left: 80px;
+.testcase_success p {
+    padding-left: 0px;
+    margin-left: 0px;
 }
 
-.scenario .statistics {
+.testcase_success .statistics {
+    background: green;
+}
+
+.testcase_failed {
+    margin-bottom: 40px;
+    padding-left: 10px;
+    background: white;
+}
+
+.testcase_failed h3 {
+    padding-bottom: 0px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.testcase_failed p {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+.testcase_failed .statistics {
+    background: red;
+}
+
+.statistics {
     font-size: 10px;
     font-weight: normal;
     padding: 2px;
@@ -223,7 +234,6 @@ body {
     border-style: solid;
     border-radius: 5px;
     border-width: 1px;
-    background: green;
     color: white;
     margin-left: 80px;
 }
