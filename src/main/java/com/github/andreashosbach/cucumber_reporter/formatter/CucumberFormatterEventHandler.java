@@ -5,7 +5,6 @@ import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
 import cucumber.api.HookTestStep;
 import cucumber.api.PickleStepTestStep;
 import cucumber.api.Result;
-import cucumber.api.TestStep;
 import cucumber.api.event.*;
 import gherkin.pickles.PickleTag;
 import org.scenarioo.api.ScenarioDocuWriter;
@@ -38,7 +37,7 @@ public final class CucumberFormatterEventHandler {
     private Step currentStep;
     private FeatureFile currentFeatureFile;
 
-    public CucumberFormatterEventHandler(String branchName, String buildName,String outputDirectory) {
+    public CucumberFormatterEventHandler(String branchName, String buildName, String outputDirectory) {
         this.outputDirectory = outputDirectory;
         this.branchName = branchName;
         this.buildName = buildName;
@@ -140,12 +139,11 @@ public final class CucumberFormatterEventHandler {
         stepDescription.setIndex(currentStepIndex);
         Details details = new Details();
         details.addDetail("glue_code", event.testStep.getCodeLocation());
-        stepDescription.setDetails(details);
         currentStepIndex++;
 
         if (event.testStep instanceof PickleStepTestStep) {
             PickleStepTestStep testStep = (PickleStepTestStep) event.testStep;
-            stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStepLine()));
+            stepDescription.setTitle(testStep.getPickleStep().getText());
         } else if (event.testStep instanceof HookTestStep) {
             HookTestStep hookTestStep = (HookTestStep) event.testStep;
             stepDescription.setTitle(hookTestStep.getHookType().toString());
@@ -154,6 +152,7 @@ public final class CucumberFormatterEventHandler {
         }
 
         System.out.println("    " + stepDescription.getTitle());
+        stepDescription.setDetails(details);
         currentStep.setStepDescription(stepDescription);
     }
 
@@ -163,6 +162,7 @@ public final class CucumberFormatterEventHandler {
         try {
             Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
         } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         writer.saveStep(currentUseCase, currentScenario, currentStep);
     }
