@@ -5,6 +5,6 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features="src/test/resources/features/full", glue="com.github.andreashosbach.cucumber_reporter.feature", plugin="com.github.andreashosbach.cucumber_reporter.CucumberReportPlugin:target/fullreport.html", strict=true)
+@CucumberOptions(features="src/test/resources/features/full", glue="com.github.andreashosbach.cucumber_reporter.feature", plugin="com.github.andreashosbach.cucumber_reporter.CucumberReportPlugin:target/fullreport", strict=true)
 public class FullFeatureCucumberRunner {
 }

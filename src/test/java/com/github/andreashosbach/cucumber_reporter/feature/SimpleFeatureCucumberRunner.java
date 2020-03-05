@@ -5,6 +5,6 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features="src/test/resources/features/simple", glue="com.github.andreashosbach.cucumber_reporter.feature", plugin="com.github.andreashosbach.cucumber_reporter.CucumberReportPlugin:target/simplereport.html", strict=true)
+@CucumberOptions(features="src/test/resources/features/simple", glue="com.github.andreashosbach.cucumber_reporter.feature", plugin="com.github.andreashosbach.cucumber_reporter.CucumberReportPlugin:target/simplereport", strict=true)
 public class SimpleFeatureCucumberRunner {
 }

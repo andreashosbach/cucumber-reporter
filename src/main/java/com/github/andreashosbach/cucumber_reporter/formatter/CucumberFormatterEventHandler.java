@@ -1,127 +1,202 @@
 package com.github.andreashosbach.cucumber_reporter.formatter;
 
-import com.github.andreashosbach.cucumber_reporter.bo.TestFeature;
-import com.github.andreashosbach.cucumber_reporter.bo.TestCase;
-import com.github.andreashosbach.cucumber_reporter.bo.TestStep;
+import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
+import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
 import cucumber.api.HookTestStep;
 import cucumber.api.PickleStepTestStep;
+import cucumber.api.Result;
+import cucumber.api.TestStep;
 import cucumber.api.event.*;
+import gherkin.pickles.PickleTag;
+import org.scenarioo.api.ScenarioDocuWriter;
+import org.scenarioo.api.exception.ScenarioDocuSaveException;
+import org.scenarioo.model.docu.entities.*;
+import org.scenarioo.model.docu.entities.generic.Details;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public final class CucumberFormatterEventHandler {
-    private final CucumberFormatter formatter;
 
-    private Map<String, List<String>> testSources = new HashMap<>();
-    private Map<String, String> featureNames = new HashMap<>();
+    private ScenarioDocuWriter writer;
 
-    private List<String> currentTestSource;
-    private TestFeature currentFeature;
-    private TestCase currentTestCase;
-    private TestStep currentStep;
+    private String outputDirectory;
+    private String branchName;
+    private String buildName;
 
-    public CucumberFormatterEventHandler(CucumberFormatter formatter) {
-        this.formatter = formatter;
+    private FeatureFiles featureFiles;
+
+    private Branch currentBranch;
+    private Build currentBuild;
+    private UseCase currentUseCase;
+    private Scenario currentScenario;
+    private Status aggregatedScenarioStatus;
+    private int currentStepIndex;
+    private Step currentStep;
+    private FeatureFile currentFeatureFile;
+
+    public CucumberFormatterEventHandler(String branchName, String buildName,String outputDirectory) {
+        this.outputDirectory = outputDirectory;
+        this.branchName = branchName;
+        this.buildName = buildName;
     }
 
+    //Start of Test
+    public void startReport() {
+        System.out.println("START REPORT");
+        featureFiles = new FeatureFiles();
+        if (Files.notExists(Paths.get(outputDirectory))) {
+            try {
+                Files.createDirectory(Paths.get(outputDirectory));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        writer = new ScenarioDocuWriter(new File(outputDirectory), branchName, buildName);
+
+        currentBranch = new Branch();
+        currentBranch.setName(branchName);
+
+        currentBuild = new Build();
+        currentBuild.setDate(new Date());
+        currentBuild.setName(buildName);
+    }
+
+    //End of Test
+    public void finishReport() {
+        handleTestSuiteFinished();
+        System.out.println("FINISH REPORT");
+        writer.saveBranchDescription(currentBranch);
+        writer.saveBuildDescription(currentBuild);
+
+        try {
+            writer.flush();
+        } catch (ScenarioDocuSaveException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("REPORT WRITTEN");
+    }
+
+    //Start of Feature
     public void handleTestSourceRead(TestSourceRead event) {
-        List<String> lines = new ArrayList<>();
-        for (String line : event.source.split("\n")) {
-            lines.add(line.trim());
-        }
-        testSources.put(event.uri, lines);
-        int featureStart = event.source.indexOf("Feature:");
-        int featureEnd = event.source.indexOf("\n", featureStart);
-        String featureName = event.source.substring(featureStart + 8, featureEnd).trim();
-        featureNames.put(event.uri, featureName);
+        System.out.println("FEATURE FILE READ " + event.uri);
+        List<String> lines = Arrays.asList(event.source.split("\n"));
+        featureFiles.addFeatureFile(new FeatureFile(event.uri, event.source));
     }
 
+    //Start of Feature
+    public void handleTestSuiteStarted() {
+        currentUseCase = new UseCase();
+        currentUseCase.setName(currentFeatureFile.getFeatureName());
+        currentUseCase.setDescription(currentFeatureFile.getFeatureDescription());
+        //TODO get Tags from feature
+        aggregatedScenarioStatus = null;
+    }
+
+    //End of Feature
+    public void handleTestSuiteFinished() {
+        if (currentUseCase != null) {
+            System.out.println("END FEATURE");
+            currentUseCase.setStatus(aggregatedScenarioStatus);
+            writer.saveUseCase(currentUseCase);
+        }
+        currentUseCase = null;
+    }
+
+    //Start of Feature Element
     public void handleTestCaseStarted(TestCaseStarted event) {
-        currentTestSource = testSources.get(event.testCase.getUri());
-        if (currentFeature == null || !event.testCase.getUri().equals(currentFeature.getUri())) {
-            TestFeature feature = new TestFeature();
-            feature.setName(featureNames.get(event.testCase.getUri()));
-            feature.setDescription(getFeatureDescription(event.testCase.getUri()));
-            feature.setUri(event.testCase.getUri());
-            formatter.addFeature(feature);
-            currentFeature = feature;
+        if (currentFeatureFile == null || !event.testCase.getUri().equals(currentFeatureFile.getUri())) {
+            handleTestSuiteFinished();
+            currentFeatureFile = featureFiles.getFeatureFile(event.testCase.getUri());
+            handleTestSuiteStarted();
         }
-
-        TestCase testCase = new TestCase();
-        testCase.setName(event.testCase.getName());
-
-        event.testCase.getTags().forEach((t) -> testCase.addTag(t.getName().substring(1)));
-        currentFeature.addTestCase(testCase);
-        currentTestCase = testCase;
+        System.out.println("  START SCENARIO " + event.testCase.getName());
+        currentScenario = new Scenario();
+        currentScenario.setName(event.testCase.getName());
+        currentScenario.addDetail("designation", event.testCase.getScenarioDesignation());
+        currentScenario.setDescription(currentFeatureFile.getScenarioDescription(event.testCase.getLine()));
+        event.testCase.getTags().forEach(t -> currentScenario.addLabel(sanitizeTag(t)));
     }
 
-    public String getFeatureDescription(String uri) {
-        List<String> source = testSources.get(uri);
-
-        //find line with Feature:
-        //get all lines that are not commented until: "Scenario:" "Scenario Outline:" "Background:"
-        int pos = 0;
-        while (pos < source.size() && !source.get(pos).trim().startsWith("Feature:")) {
-            pos++;
-        }
-        pos++;
-
-        String description = "";
-        while (pos < source.size() && !startsWithKeyword(source.get(pos))) {
-            if (!isComment(source.get(pos)) && !source.get(pos).isEmpty())
-                description += source.get(pos) + "\n";
-            pos++;
-        }
-        return description;
+    private static String sanitizeTag(PickleTag tag) {
+        return tag.getName().replaceAll("[^a-zA-Z0-9_-]", "");
     }
 
-    boolean startsWithKeyword(String line) {
-        String l = line.trim();
-        return l.startsWith("Scenario:") || l.startsWith("Example:") || l.startsWith("Background:") || l.startsWith("Scenario Outline:") || l.startsWith("@");
-    }
-
-    boolean isComment(String line) {
-        return line.trim().startsWith("#");
-    }
-
+    //End of Feature Element
     public void handleTestCaseFinished(TestCaseFinished event) {
-        currentTestCase.setDuration(event.result.getDuration());
+        System.out.println("  END SCENARIO");
+        currentScenario.setStatus(mapResult(event.result));
+        writer.saveScenario(currentUseCase, currentScenario);
     }
 
+    //Start of Step
     public void handleTestStepStarted(TestStepStarted event) {
-        TestStep step = new TestStep();
+        currentStep = new Step();
+        StepDescription stepDescription = new StepDescription();
+        stepDescription.setIndex(currentStepIndex);
+        Details details = new Details();
+        details.addDetail("glue_code", event.testStep.getCodeLocation());
+        stepDescription.setDetails(details);
+        currentStepIndex++;
+
         if (event.testStep instanceof PickleStepTestStep) {
             PickleStepTestStep testStep = (PickleStepTestStep) event.testStep;
-            step.setSource(currentTestSource.get(testStep.getStepLine() - 1));
-            step.setText(testStep.getPickleStep().getText());
-            currentTestCase.addStep(step);
+            stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStepLine()));
         } else if (event.testStep instanceof HookTestStep) {
             HookTestStep hookTestStep = (HookTestStep) event.testStep;
-            step.setSource(hookTestStep.getHookType().name());
-            System.out.println("Hook" + hookTestStep.getHookType().name());
+            stepDescription.setTitle(hookTestStep.getHookType().toString());
         } else {
             throw new IllegalStateException("Unknown step type");
         }
-        currentStep = step;
+
+        System.out.println("    " + stepDescription.getTitle());
+        currentStep.setStepDescription(stepDescription);
     }
 
-    public void handleWrite(WriteEvent event) {
-        System.out.println("Write: " + event.text);
-    }
-
-    public void handleEmbed(EmbedEvent event) {
-        System.out.println("Embed: " + Arrays.toString(event.data));
-    }
-
+    //End of Step
     public void handleTestStepFinished(TestStepFinished event) {
-        currentStep.setResult(event.result.getStatus().name());
-        currentStep.setError(event.result.getErrorMessage());
+        System.out.println("STEP FINISHED");
+        try {
+            Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
+        } catch (InterruptedException e) {
+        }
+        writer.saveStep(currentUseCase, currentScenario, currentStep);
     }
 
-    public void startReport() {
+    //Write Hook
+    public void handleWrite(WriteEvent event) {
     }
 
-    public void finishReport() {
-        formatter.writeOutput();
+    //Embed Hook
+    public void handleEmbed(EmbedEvent event) {
+    }
+
+    private Status mapResult(Result result) {
+        Status status;
+        switch (result.getStatus()) {
+            case PASSED:
+                status = Status.SUCCESS;
+                break;
+            case SKIPPED:
+            case PENDING:
+            case UNDEFINED:
+            case AMBIGUOUS:
+            case FAILED:
+                status = Status.FAILED;
+                break;
+            default:
+                throw new IllegalStateException("Unknown result status " + result.getStatus());
+        }
+
+        if (aggregatedScenarioStatus == null) {
+            aggregatedScenarioStatus = status;
+        } else if (status == Status.FAILED) {
+            aggregatedScenarioStatus = Status.FAILED;
+        }
+        return status;
     }
 }

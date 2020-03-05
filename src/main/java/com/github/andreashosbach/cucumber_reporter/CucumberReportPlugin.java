@@ -1,9 +1,10 @@
 package com.github.andreashosbach.cucumber_reporter;
 
 import com.github.andreashosbach.cucumber_reporter.formatter.CucumberFormatterEventHandler;
-import com.github.andreashosbach.cucumber_reporter.formatter.CucumberJ2HTMLFormatter;
 import cucumber.api.event.*;
-import cucumber.api.formatter.NiceAppendable;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public final class CucumberReportPlugin implements EventListener {
     private final CucumberFormatterEventHandler eventHandler;
@@ -66,24 +67,30 @@ public final class CucumberReportPlugin implements EventListener {
     };
 
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
-    public CucumberReportPlugin(Appendable out) {
-        eventHandler = new CucumberFormatterEventHandler(new CucumberJ2HTMLFormatter(new NiceAppendable(out)));
+    public CucumberReportPlugin(String out) {
+        String build = "Build-" + new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
+        eventHandler = new CucumberFormatterEventHandler("branch",build,out);
     }
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
+        //Build
+        publisher.registerHandlerFor(TestRunStarted.class, runStartedHandler);
+        publisher.registerHandlerFor(TestRunFinished.class, runFinishedHandler);
+
+        //FeatureFile
         publisher.registerHandlerFor(TestSourceRead.class, testSourceReadHandler);
 
+        //FeatureElement
         publisher.registerHandlerFor(TestCaseStarted.class, caseStartedHandler);
         publisher.registerHandlerFor(TestCaseFinished.class, caseFinishedHandler);
 
+        //Step
         publisher.registerHandlerFor(TestStepStarted.class, stepStartedHandler);
         publisher.registerHandlerFor(TestStepFinished.class, stepFinishedHandler);
 
+        //Hooks
         publisher.registerHandlerFor(WriteEvent.class, writeEventhandler);
         publisher.registerHandlerFor(EmbedEvent.class, embedEventhandler);
-
-        publisher.registerHandlerFor(TestRunStarted.class, runStartedHandler);
-        publisher.registerHandlerFor(TestRunFinished.class, runFinishedHandler);
     }
 }
