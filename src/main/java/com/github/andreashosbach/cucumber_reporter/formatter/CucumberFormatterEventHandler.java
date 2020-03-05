@@ -63,6 +63,7 @@ public final class CucumberFormatterEventHandler {
         currentBuild = new Build();
         currentBuild.setDate(new Date());
         currentBuild.setName(buildName);
+        currentBuild.setRevision("0.1");
     }
 
     //End of Test
@@ -119,6 +120,7 @@ public final class CucumberFormatterEventHandler {
         currentScenario.addDetail("designation", event.testCase.getScenarioDesignation());
         currentScenario.setDescription(currentFeatureFile.getScenarioDescription(event.testCase.getLine()));
         event.testCase.getTags().forEach(t -> currentScenario.addLabel(sanitizeTag(t)));
+        currentStepIndex = 0;
     }
 
     private static String sanitizeTag(PickleTag tag) {
