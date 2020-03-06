@@ -1,4 +1,4 @@
-package com.github.andreashosbach.cucumber_reporter.feature;
+package stepdefs;
 
 import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
 import cucumber.api.PendingException;
@@ -19,15 +19,6 @@ import java.nio.file.Paths;
 import static org.junit.Assert.fail;
 
 public class FeatureSteps {
-    @AfterStep(value = "@Screenshots")
-    public void afterStep(){
-        try {
-            Screenshot.save(Files.readAllBytes(Paths.get("src/test/resources/cucumber.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Given("^the status before$")
     public void theStatusBefore() {

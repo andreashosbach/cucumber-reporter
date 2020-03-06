@@ -142,11 +142,11 @@ public final class CucumberFormatterEventHandler {
         stepDescription.setIndex(currentStepIndex);
         Details details = new Details();
         details.addDetail("glue_code", event.testStep.getCodeLocation());
-        currentStepIndex++;
 
         if (event.testStep instanceof PickleStepTestStep) {
             PickleStepTestStep testStep = (PickleStepTestStep) event.testStep;
-            stepDescription.setTitle(testStep.getPickleStep().getText());
+//            stepDescription.setTitle(testStep.getPickleStep().getText());
+            stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStepLine()).trim());
         } else if (event.testStep instanceof HookTestStep) {
             HookTestStep hookTestStep = (HookTestStep) event.testStep;
             stepDescription.setTitle(hookTestStep.getHookType().toString());
@@ -162,13 +162,21 @@ public final class CucumberFormatterEventHandler {
     //End of Step
     public void handleTestStepFinished(TestStepFinished event) {
         System.out.println("STEP FINISHED");
-        try {
-            Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (event.testStep instanceof PickleStepTestStep) {
+            try {
+                Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Page page = new Page();
+            page.setName(Screenshot.getPageName(currentStepIndex));
+            currentStep.setPage(page);
+            writer.saveStep(currentUseCase, currentScenario, currentStep);
+            writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage(currentStepIndex));
+            currentStepIndex++;
+        }else{
+            System.out.println("IGNORING HOOK STEPS");
         }
-        writer.saveStep(currentUseCase, currentScenario, currentStep);
-        writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage());
     }
 
     //Write Hook

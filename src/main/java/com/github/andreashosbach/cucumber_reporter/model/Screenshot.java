@@ -1,6 +1,5 @@
 package com.github.andreashosbach.cucumber_reporter.model;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Screenshot {
-    private static Screenshot screenshot;
+    private static List<Screenshot> screenshots = new ArrayList<>();
 
     private byte[] image;
+    private String pageName;
 
     private static byte[] defaultImage;
 
@@ -22,22 +22,30 @@ public class Screenshot {
         }
     }
 
-    private Screenshot(byte[] image) {
+    private Screenshot(String pageName, byte[] image) {
+        this.pageName = pageName;
         this.image = image;
     }
 
-    public static void save(byte[] image) {
-        screenshot = new Screenshot(image);
+    public static void save(String pageName, byte[] image) {
+        System.out.println("TAKING SCREENSHOT " + pageName);
+        screenshots.add(new Screenshot(pageName, image));
     }
 
-    public static byte[] getScreenshotImage() {
+    public static byte[] getScreenshotImage(int index) {
         byte[] bytes;
-        if (screenshot != null) {
-            bytes = screenshot.image;
-            screenshot = null;
+        if (index < screenshots.size()) {
+            bytes = screenshots.get(index).image;
         } else {
             bytes = defaultImage;
         }
         return bytes;
+    }
+
+    public static String getPageName(int index) {
+        if (index < screenshots.size()) {
+            return screenshots.get(index).pageName;
+        }
+        return "Not available";
     }
 }
