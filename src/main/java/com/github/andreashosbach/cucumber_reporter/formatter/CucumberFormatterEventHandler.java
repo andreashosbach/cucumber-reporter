@@ -2,6 +2,7 @@ package com.github.andreashosbach.cucumber_reporter.formatter;
 
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
+import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
 import cucumber.api.HookTestStep;
 import cucumber.api.PickleStepTestStep;
 import cucumber.api.Result;
@@ -49,7 +50,7 @@ public final class CucumberFormatterEventHandler {
         featureFiles = new FeatureFiles();
         if (Files.notExists(Paths.get(outputDirectory))) {
             try {
-                Files.createDirectory(Paths.get(outputDirectory));
+                Files.createDirectories(Paths.get(outputDirectory));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -167,6 +168,7 @@ public final class CucumberFormatterEventHandler {
             e.printStackTrace();
         }
         writer.saveStep(currentUseCase, currentScenario, currentStep);
+        writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage());
     }
 
     //Write Hook

@@ -2,7 +2,7 @@
 Feature: Full blown feature
   This is the description of the feature
 
-  @firstTag
+  @firstTag @Screenshots
   Scenario: A first scenario
     Description of the first scenario
     Given the status before

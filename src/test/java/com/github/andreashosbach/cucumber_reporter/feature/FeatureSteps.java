@@ -1,14 +1,34 @@
 package com.github.andreashosbach.cucumber_reporter.feature;
 
+import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
 import cucumber.api.PendingException;
+import cucumber.api.java.AfterStep;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.After;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.fail;
 
 public class FeatureSteps {
+    @AfterStep(value = "@Screenshots")
+    public void afterStep(){
+        try {
+            Screenshot.save(Files.readAllBytes(Paths.get("src/test/resources/cucumber.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Given("^the status before$")
     public void theStatusBefore() {
     }
