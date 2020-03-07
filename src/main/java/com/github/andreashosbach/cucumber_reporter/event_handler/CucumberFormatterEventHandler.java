@@ -117,7 +117,7 @@ public final class CucumberFormatterEventHandler {
         currentScenario.setName(event.getTestCase().getName());
         currentScenario.setDescription(currentFeatureFile.getScenarioDescription(event.getTestCase().getLine()));
         event.getTestCase().getTags().forEach(t -> currentScenario.addLabel(sanitizeTag(t)));
-        currentStepIndex = 0;
+        currentStepIndex = -1;
     }
 
     private static String sanitizeTag(String tag) {
@@ -133,45 +133,48 @@ public final class CucumberFormatterEventHandler {
 
     //Start of Step
     public void handleTestStepStarted(TestStepStarted event) {
-        currentStep = new Step();
-        StepDescription stepDescription = new StepDescription();
-        stepDescription.setIndex(currentStepIndex);
-        Details details = new Details();
-        details.addDetail("glue_code", event.getTestStep().getCodeLocation());
 
         if (event.getTestStep() instanceof PickleStepTestStep) {
+            currentStepIndex++;
+            currentStep = new Step();
+            StepDescription stepDescription = new StepDescription();
+            Details details = new Details();
+            details.addDetail("glue_code", event.getTestStep().getCodeLocation());
             PickleStepTestStep testStep = (PickleStepTestStep) event.getTestStep();
 //            stepDescription.setTitle(testStep.getPickleStep().getText());
             stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStep().getLine()).trim());
+            System.out.println("    START STEP " + stepDescription.getTitle());
+            stepDescription.setDetails(details);
+            currentStep.setStepDescription(stepDescription);
         } else if (event.getTestStep() instanceof HookTestStep) {
-            HookTestStep hookTestStep = (HookTestStep) event.getTestStep();
-            stepDescription.setTitle(hookTestStep.getHookType().toString());
+            // do nothing we are still in the same gherkin step
         } else {
             throw new IllegalStateException("Unknown step type");
         }
 
-        System.out.println("    " + stepDescription.getTitle());
-        stepDescription.setDetails(details);
-        currentStep.setStepDescription(stepDescription);
     }
 
     //End of Step
     public void handleTestStepFinished(TestStepFinished event) {
-        System.out.println("STEP FINISHED");
+        System.out.println("    STEP FINISHED");
         if (event.getTestStep() instanceof PickleStepTestStep) {
             try {
                 Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Page page = new Page();
-            page.setName(Screenshot.getPageName(currentStepIndex));
-            currentStep.setPage(page);
             writer.saveStep(currentUseCase, currentScenario, currentStep);
-            writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage(currentStepIndex));
-            currentStepIndex++;
+        } else if (event.getTestStep() instanceof HookTestStep) {
+            HookTestStep hookTestStep = (HookTestStep) event.getTestStep();
+            if (hookTestStep.getHookType() == HookType.AFTER_STEP) {
+                Page page = new Page();
+                page.setName(Screenshot.getPageName(currentStepIndex));
+                currentStep.setPage(page);
+                writer.saveStep(currentUseCase, currentScenario, currentStep);
+                writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage(currentStepIndex));
+            }
         } else {
-            System.out.println("IGNORING HOOK STEPS");
+            throw new IllegalStateException("Unknown step type");
         }
     }
 

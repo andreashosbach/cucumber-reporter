@@ -39,8 +39,10 @@ public class Screenshot {
     public static byte[] getScreenshotImage(int index) {
         byte[] bytes;
         if (index < screenshots.size()) {
+            System.out.println("RETRIEVED SCREENSHOT " + index);
             bytes = screenshots.get(index).image;
         } else {
+            System.out.println("SCREENSHOT UNAVAILABLE " + index);
             bytes = defaultImage;
         }
         return bytes;

@@ -23,7 +23,7 @@ public class SeleniumFeatureSteps {
 
     private WebDriver webDriver;
 
-    @AfterStep(value = "@Screenshots")
+    @AfterStep
     public void afterStep() {
         TakesScreenshot scrShot = ((TakesScreenshot) webDriver);
         Screenshot.save(webDriver.getTitle(), scrShot.getScreenshotAs(OutputType.BYTES));
@@ -33,6 +33,7 @@ public class SeleniumFeatureSteps {
     public void setupDriver() {
         System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
         webDriver = new ChromeDriver();
+        webDriver.get("about:version");
 
         webDriver.manage().window().maximize();
 
@@ -46,19 +47,19 @@ public class SeleniumFeatureSteps {
         webDriver.quit();
     }
 
-    @Given("the website {string}")
-    public void theWebsite(String arg0) {
-        webDriver.get(arg0);
+    @Given("the website {string} is displayed")
+    public void theWebsite(String url) {
+        webDriver.navigate().to(url);
     }
 
     @When("the link {string} is clicked")
-    public void theLinkIsClicked(String arg0) {
+    public void theLinkIsClicked(String linkText) {
         WebDriverWait wait = new WebDriverWait(webDriver, 5);
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(arg0))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText))).click();
     }
 
-    @Then("the website with title {string} is displayed")
-    public void theWebsiteWithTitleIsDisplayed(String arg0) {
-        assertEquals(arg0, webDriver.getTitle());
+    @Then("the website with title {string} should be displayed")
+    public void theWebsiteWithTitleIsDisplayed(String title) {
+        assertEquals(title, webDriver.getTitle());
     }
 }
