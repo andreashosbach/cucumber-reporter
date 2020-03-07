@@ -1,4 +1,4 @@
-package stepdefs;
+package selenium_stepdefs;
 
 import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
 import io.cucumber.java.After;
