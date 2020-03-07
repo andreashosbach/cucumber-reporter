@@ -32,6 +32,10 @@ public class Screenshot {
         screenshots.add(new Screenshot(pageName, image));
     }
 
+    public static void blank(){
+        screenshots.add(new Screenshot("Not available", defaultImage));
+    }
+
     public static byte[] getScreenshotImage(int index) {
         byte[] bytes;
         if (index < screenshots.size()) {

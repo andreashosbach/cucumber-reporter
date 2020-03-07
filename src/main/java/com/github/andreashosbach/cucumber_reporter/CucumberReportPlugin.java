@@ -1,7 +1,8 @@
 package com.github.andreashosbach.cucumber_reporter;
 
-import com.github.andreashosbach.cucumber_reporter.formatter.CucumberFormatterEventHandler;
-import cucumber.api.event.*;
+import com.github.andreashosbach.cucumber_reporter.event_handler.CucumberFormatterEventHandler;
+import io.cucumber.plugin.EventListener;
+import io.cucumber.plugin.event.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

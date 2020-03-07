@@ -1,12 +1,12 @@
 package stepdefs;
 
 import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
-import cucumber.api.java.AfterStep;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import org.junit.After;
+import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -42,7 +42,8 @@ public class SeleniumFeatureSteps {
 
     @After
     public void cleanupDriver() {
-        webDriver.close();;
+        webDriver.close();
+        webDriver.quit();
     }
 
     @Given("the website {string}")

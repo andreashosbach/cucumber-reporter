@@ -1,7 +1,5 @@
 package com.github.andreashosbach.cucumber_reporter.model;
 
-import cucumber.api.TestCase;
-
 import java.util.ArrayList;
 import java.util.List;
 

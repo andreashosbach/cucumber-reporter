@@ -1,16 +1,14 @@
-package com.github.andreashosbach.cucumber_reporter.formatter;
+package com.github.andreashosbach.cucumber_reporter.event_handler;
 
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
 import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
-import cucumber.api.HookTestStep;
-import cucumber.api.PickleStepTestStep;
-import cucumber.api.Result;
-import cucumber.api.event.*;
-import gherkin.pickles.PickleTag;
+import io.cucumber.plugin.event.*;
 import org.scenarioo.api.ScenarioDocuWriter;
 import org.scenarioo.api.exception.ScenarioDocuSaveException;
 import org.scenarioo.model.docu.entities.*;
+import org.scenarioo.model.docu.entities.Status;
+import org.scenarioo.model.docu.entities.Step;
 import org.scenarioo.model.docu.entities.generic.Details;
 
 import java.io.File;
@@ -84,9 +82,8 @@ public final class CucumberFormatterEventHandler {
 
     //Start of Feature
     public void handleTestSourceRead(TestSourceRead event) {
-        System.out.println("FEATURE FILE READ " + event.uri);
-        List<String> lines = Arrays.asList(event.source.split("\n"));
-        featureFiles.addFeatureFile(new FeatureFile(event.uri, event.source));
+        System.out.println("FEATURE FILE READ " + event.getUri());
+        featureFiles.addFeatureFile(new FeatureFile(event.getUri().toString(), event.getSource()));
     }
 
     //Start of Feature
@@ -110,28 +107,27 @@ public final class CucumberFormatterEventHandler {
 
     //Start of Feature Element
     public void handleTestCaseStarted(TestCaseStarted event) {
-        if (currentFeatureFile == null || !event.testCase.getUri().equals(currentFeatureFile.getUri())) {
+        if (currentFeatureFile == null || !event.getTestCase().getUri().toString().equals(currentFeatureFile.getUri())) {
             handleTestSuiteFinished();
-            currentFeatureFile = featureFiles.getFeatureFile(event.testCase.getUri());
+            currentFeatureFile = featureFiles.getFeatureFile(event.getTestCase().getUri().toString());
             handleTestSuiteStarted();
         }
-        System.out.println("  START SCENARIO " + event.testCase.getName());
+        System.out.println("  START SCENARIO " + event.getTestCase().getName());
         currentScenario = new Scenario();
-        currentScenario.setName(event.testCase.getName());
-        currentScenario.addDetail("designation", event.testCase.getScenarioDesignation());
-        currentScenario.setDescription(currentFeatureFile.getScenarioDescription(event.testCase.getLine()));
-        event.testCase.getTags().forEach(t -> currentScenario.addLabel(sanitizeTag(t)));
+        currentScenario.setName(event.getTestCase().getName());
+        currentScenario.setDescription(currentFeatureFile.getScenarioDescription(event.getTestCase().getLine()));
+        event.getTestCase().getTags().forEach(t -> currentScenario.addLabel(sanitizeTag(t)));
         currentStepIndex = 0;
     }
 
-    private static String sanitizeTag(PickleTag tag) {
-        return tag.getName().replaceAll("[^a-zA-Z0-9_-]", "");
+    private static String sanitizeTag(String tag) {
+        return tag.replaceAll("[^a-zA-Z0-9_-]", "");
     }
 
     //End of Feature Element
     public void handleTestCaseFinished(TestCaseFinished event) {
         System.out.println("  END SCENARIO");
-        currentScenario.setStatus(mapResult(event.result));
+        currentScenario.setStatus(mapResult(event.getResult()));
         writer.saveScenario(currentUseCase, currentScenario);
     }
 
@@ -141,14 +137,14 @@ public final class CucumberFormatterEventHandler {
         StepDescription stepDescription = new StepDescription();
         stepDescription.setIndex(currentStepIndex);
         Details details = new Details();
-        details.addDetail("glue_code", event.testStep.getCodeLocation());
+        details.addDetail("glue_code", event.getTestStep().getCodeLocation());
 
-        if (event.testStep instanceof PickleStepTestStep) {
-            PickleStepTestStep testStep = (PickleStepTestStep) event.testStep;
+        if (event.getTestStep() instanceof PickleStepTestStep) {
+            PickleStepTestStep testStep = (PickleStepTestStep) event.getTestStep();
 //            stepDescription.setTitle(testStep.getPickleStep().getText());
-            stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStepLine()).trim());
-        } else if (event.testStep instanceof HookTestStep) {
-            HookTestStep hookTestStep = (HookTestStep) event.testStep;
+            stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStep().getLine()).trim());
+        } else if (event.getTestStep() instanceof HookTestStep) {
+            HookTestStep hookTestStep = (HookTestStep) event.getTestStep();
             stepDescription.setTitle(hookTestStep.getHookType().toString());
         } else {
             throw new IllegalStateException("Unknown step type");
@@ -162,7 +158,7 @@ public final class CucumberFormatterEventHandler {
     //End of Step
     public void handleTestStepFinished(TestStepFinished event) {
         System.out.println("STEP FINISHED");
-        if (event.testStep instanceof PickleStepTestStep) {
+        if (event.getTestStep() instanceof PickleStepTestStep) {
             try {
                 Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
             } catch (InterruptedException e) {
@@ -174,7 +170,7 @@ public final class CucumberFormatterEventHandler {
             writer.saveStep(currentUseCase, currentScenario, currentStep);
             writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage(currentStepIndex));
             currentStepIndex++;
-        }else{
+        } else {
             System.out.println("IGNORING HOOK STEPS");
         }
     }
