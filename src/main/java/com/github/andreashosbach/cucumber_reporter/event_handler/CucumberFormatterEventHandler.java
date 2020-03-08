@@ -1,21 +1,17 @@
 package com.github.andreashosbach.cucumber_reporter.event_handler;
 
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
-import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
+import com.github.andreashosbach.cucumber_reporter.model.*;
 import io.cucumber.plugin.event.*;
 import org.scenarioo.api.ScenarioDocuWriter;
 import org.scenarioo.api.exception.ScenarioDocuSaveException;
 import org.scenarioo.model.docu.entities.*;
 import org.scenarioo.model.docu.entities.Status;
 import org.scenarioo.model.docu.entities.Step;
-import org.scenarioo.model.docu.entities.generic.Details;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
 
 public final class CucumberFormatterEventHandler {
 
@@ -24,6 +20,7 @@ public final class CucumberFormatterEventHandler {
     private String outputDirectory;
     private String branchName;
     private String buildName;
+    private String revision;
 
     private FeatureFiles featureFiles;
 
@@ -36,15 +33,15 @@ public final class CucumberFormatterEventHandler {
     private Step currentStep;
     private FeatureFile currentFeatureFile;
 
-    public CucumberFormatterEventHandler(String branchName, String buildName, String outputDirectory) {
+    public CucumberFormatterEventHandler(String branchName, String buildName, String revision, String outputDirectory) {
         this.outputDirectory = outputDirectory;
         this.branchName = branchName;
         this.buildName = buildName;
+        this.revision = revision;
     }
 
     //Start of Test
     public void startReport() {
-        System.out.println("START REPORT");
         featureFiles = new FeatureFiles();
         if (Files.notExists(Paths.get(outputDirectory))) {
             try {
@@ -53,22 +50,15 @@ public final class CucumberFormatterEventHandler {
                 throw new RuntimeException(e);
             }
         }
-
         writer = new ScenarioDocuWriter(new File(outputDirectory), branchName, buildName);
 
-        currentBranch = new Branch();
-        currentBranch.setName(branchName);
-
-        currentBuild = new Build();
-        currentBuild.setDate(new Date());
-        currentBuild.setName(buildName);
-        currentBuild.setRevision("0.1");
+        currentBranch = BranchMapper.mapBranch(branchName);
+        currentBuild = BuildMapper.mapBuild(buildName, revision);
     }
 
     //End of Test
     public void finishReport() {
         handleTestSuiteFinished();
-        System.out.println("FINISH REPORT");
         writer.saveBranchDescription(currentBranch);
         writer.saveBuildDescription(currentBuild);
 
@@ -77,28 +67,22 @@ public final class CucumberFormatterEventHandler {
         } catch (ScenarioDocuSaveException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("REPORT WRITTEN");
     }
 
     //Start of Feature
     public void handleTestSourceRead(TestSourceRead event) {
-        System.out.println("FEATURE FILE READ " + event.getUri());
         featureFiles.addFeatureFile(new FeatureFile(event.getUri().toString(), event.getSource()));
     }
 
     //Start of Feature
-    public void handleTestSuiteStarted() {
-        currentUseCase = new UseCase();
-        currentUseCase.setName(currentFeatureFile.getFeatureName());
-        currentUseCase.setDescription(currentFeatureFile.getFeatureDescription());
-        //TODO get Tags from feature
+    private void handleTestSuiteStarted() {
+        currentUseCase = UseCaseMapper.mapUseCase(currentFeatureFile);
         aggregatedScenarioStatus = null;
     }
 
     //End of Feature
-    public void handleTestSuiteFinished() {
+    private void handleTestSuiteFinished() {
         if (currentUseCase != null) {
-            System.out.println("END FEATURE");
             currentUseCase.setStatus(aggregatedScenarioStatus);
             writer.saveUseCase(currentUseCase);
         }
@@ -107,45 +91,31 @@ public final class CucumberFormatterEventHandler {
 
     //Start of Feature Element
     public void handleTestCaseStarted(TestCaseStarted event) {
-        if (currentFeatureFile == null || !event.getTestCase().getUri().toString().equals(currentFeatureFile.getUri())) {
+        if (isInNewFeature(event.getTestCase())) {
             handleTestSuiteFinished();
             currentFeatureFile = featureFiles.getFeatureFile(event.getTestCase().getUri().toString());
             handleTestSuiteStarted();
         }
-        System.out.println("  START SCENARIO " + event.getTestCase().getName());
-        currentScenario = new Scenario();
-        currentScenario.setName(event.getTestCase().getName());
-        currentScenario.setDescription(currentFeatureFile.getScenarioDescription(event.getTestCase().getLine()));
-        event.getTestCase().getTags().forEach(t -> currentScenario.addLabel(sanitizeTag(t)));
+        currentScenario = ScenarioMapper.mapScenario(event.getTestCase(), currentFeatureFile);
         currentStepIndex = -1;
     }
 
-    private static String sanitizeTag(String tag) {
-        return tag.replaceAll("[^a-zA-Z0-9_-]", "");
+    private boolean isInNewFeature(TestCase testCase) {
+        return currentFeatureFile == null || !testCase.getUri().toString().equals(currentFeatureFile.getUri());
     }
 
     //End of Feature Element
     public void handleTestCaseFinished(TestCaseFinished event) {
-        System.out.println("  END SCENARIO");
         currentScenario.setStatus(mapResult(event.getResult()));
         writer.saveScenario(currentUseCase, currentScenario);
     }
 
     //Start of Step
     public void handleTestStepStarted(TestStepStarted event) {
-
         if (event.getTestStep() instanceof PickleStepTestStep) {
             currentStepIndex++;
-            currentStep = new Step();
-            StepDescription stepDescription = new StepDescription();
-            Details details = new Details();
-            details.addDetail("glue_code", event.getTestStep().getCodeLocation());
             PickleStepTestStep testStep = (PickleStepTestStep) event.getTestStep();
-//            stepDescription.setTitle(testStep.getPickleStep().getText());
-            stepDescription.setTitle(currentFeatureFile.getLine(testStep.getStep().getLine()).trim());
-            System.out.println("    START STEP " + stepDescription.getTitle());
-            stepDescription.setDetails(details);
-            currentStep.setStepDescription(stepDescription);
+            currentStep = StepMapper.mapStep(testStep, currentFeatureFile);
         } else if (event.getTestStep() instanceof HookTestStep) {
             // do nothing we are still in the same gherkin step
         } else {
@@ -156,14 +126,13 @@ public final class CucumberFormatterEventHandler {
 
     //End of Step
     public void handleTestStepFinished(TestStepFinished event) {
-        System.out.println("    STEP FINISHED");
+        try {
+            Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (event.getTestStep() instanceof PickleStepTestStep) {
-            try {
-                Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            writer.saveStep(currentUseCase, currentScenario, currentStep);
+            // Save only on the after hook
         } else if (event.getTestStep() instanceof HookTestStep) {
             HookTestStep hookTestStep = (HookTestStep) event.getTestStep();
             if (hookTestStep.getHookType() == HookType.AFTER_STEP) {
@@ -187,21 +156,7 @@ public final class CucumberFormatterEventHandler {
     }
 
     private Status mapResult(Result result) {
-        Status status;
-        switch (result.getStatus()) {
-            case PASSED:
-                status = Status.SUCCESS;
-                break;
-            case SKIPPED:
-            case PENDING:
-            case UNDEFINED:
-            case AMBIGUOUS:
-            case FAILED:
-                status = Status.FAILED;
-                break;
-            default:
-                throw new IllegalStateException("Unknown result status " + result.getStatus());
-        }
+        Status status = StatusMapper.mapStatus(result);
 
         if (aggregatedScenarioStatus == null) {
             aggregatedScenarioStatus = status;

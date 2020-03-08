@@ -70,7 +70,7 @@ public final class CucumberReportPlugin implements EventListener {
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
     public CucumberReportPlugin(String out) {
         String build = "Build-" + new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
-        eventHandler = new CucumberFormatterEventHandler("branch",build,out);
+        eventHandler = new CucumberFormatterEventHandler("branch", build, "1.0", out);
     }
 
     @Override
