@@ -1,6 +1,5 @@
 package stepdefs;
 
-import io.cucumber.java.AfterStep;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

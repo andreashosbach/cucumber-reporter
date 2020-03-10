@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class Screenshot {
-    private static Logger logger = Logger.getGlobal();
+    private static final Logger logger = Logger.getGlobal();
 
     private static List<Screenshot> screenshots = new ArrayList<>();
 

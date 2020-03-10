@@ -11,12 +11,12 @@ public class GherkinUtils {
 
     public static boolean isFeatureTitle(String line){
         final String l = line.trim();
-        return  Arrays.asList(FEATURE_KEYWORDS).stream().anyMatch(k -> l.startsWith(k));
+        return  Arrays.stream(FEATURE_KEYWORDS).anyMatch(l::startsWith);
     }
 
     public static boolean isScenarioTitle(String line) {
         final String l = line.trim();
-        return  Arrays.asList(SCENARIO_KEYWORDS).stream().anyMatch(k -> l.startsWith(k));
+        return  Arrays.stream(SCENARIO_KEYWORDS).anyMatch(l::startsWith);
     }
 
     public static boolean startsWithTag(String line){
@@ -29,6 +29,6 @@ public class GherkinUtils {
 
     public static boolean isStep(String line) {
         final String l = line.trim();
-        return !Arrays.asList(STEP_KEYWORDS).stream().anyMatch(k ->l.startsWith(k));
+        return Arrays.stream(STEP_KEYWORDS).noneMatch(l::startsWith);
     }
 }

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public final class CucumberFormatterEventHandler {
 
-    private static Logger logger = Logger.getGlobal();
+    private static final Logger logger = Logger.getGlobal();
 
     private ScenarioDocuWriter writer;
 

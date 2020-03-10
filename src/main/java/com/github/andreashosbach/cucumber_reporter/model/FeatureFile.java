@@ -30,7 +30,7 @@ public class FeatureFile {
         StringBuilder description = new StringBuilder();
         while (pos < lines.size() && !GherkinUtils.isScenarioTitle(lines.get(pos)) && GherkinUtils.startsWithTag(lines.get(pos))) {
             if (!GherkinUtils.isComment(lines.get(pos)))
-                description.append(lines.get(pos) + "\n");
+                description.append(lines.get(pos)).append("\n");
             pos++;
         }
         return description.toString().trim();
@@ -40,7 +40,7 @@ public class FeatureFile {
         StringBuilder description = new StringBuilder();
         int pos = scenarioTitleLine + 1;
         while (pos < lines.size() && !GherkinUtils.isStep(lines.get(pos))) {
-            description.append(lines.get(pos) + "\n");
+            description.append(lines.get(pos)).append("\n");
             pos++;
         }
         return description.toString().trim();
@@ -49,7 +49,7 @@ public class FeatureFile {
     public String getFeatureName() {
         String titleLine = lines.stream()
                 .filter(GherkinUtils::isFeatureTitle)
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new IllegalStateException("Feature title not found"));
         return titleLine.substring(titleLine.indexOf(":") + 1);
     }
 }
