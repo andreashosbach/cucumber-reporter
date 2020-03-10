@@ -33,7 +33,6 @@ public class SeleniumFeatureSteps {
     public void setupDriver() {
         System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
         webDriver = new ChromeDriver();
-        webDriver.get("about:version");
 
         webDriver.manage().window().maximize();
 

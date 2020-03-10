@@ -116,6 +116,7 @@ public final class CucumberFormatterEventHandler {
             currentStepIndex++;
             PickleStepTestStep testStep = (PickleStepTestStep) event.getTestStep();
             currentStep = StepMapper.mapStep(testStep, currentFeatureFile);
+            currentStep.getStepDescription().setIndex(currentStepIndex);
         } else if (event.getTestStep() instanceof HookTestStep) {
             // do nothing we are still in the same gherkin step
         } else {

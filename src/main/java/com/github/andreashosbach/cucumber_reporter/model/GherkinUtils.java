@@ -17,10 +17,9 @@ public class GherkinUtils {
     public static boolean isScenarioTitle(String line) {
         final String l = line.trim();
         return  Arrays.asList(SCENARIO_KEYWORDS).stream().anyMatch(k -> l.startsWith(k));
-        //return l.startsWith("Scenario:") || l.startsWith("Example:") || l.startsWith("Background:") || l.startsWith("Scenario Outline:") || l.startsWith("@");
     }
 
-    public static boolean isTag(String line){
+    public static boolean startsWithTag(String line){
         return line.trim().startsWith(TAG_CHAR);
     }
 

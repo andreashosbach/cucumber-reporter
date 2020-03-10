@@ -27,30 +27,29 @@ public class FeatureFile {
         }
         pos++;
 
-        String description = "";
-        while (pos < lines.size() && !GherkinUtils.isScenarioTitle(lines.get(pos)) && GherkinUtils.isTag(lines.get(pos))) {
+        StringBuilder description = new StringBuilder();
+        while (pos < lines.size() && !GherkinUtils.isScenarioTitle(lines.get(pos)) && GherkinUtils.startsWithTag(lines.get(pos))) {
             if (!GherkinUtils.isComment(lines.get(pos)))
-                description += lines.get(pos) + "\n";
+                description.append(lines.get(pos) + "\n");
             pos++;
         }
-        return description.trim();
+        return description.toString().trim();
     }
 
     public String getScenarioDescription(int scenarioTitleLine) {
+        StringBuilder description = new StringBuilder();
         int pos = scenarioTitleLine + 1;
-        String description = "";
-        while(pos < lines.size() && !GherkinUtils.isStep(lines.get(pos))){
-            description += lines.get(pos) + "\n";
+        while (pos < lines.size() && !GherkinUtils.isStep(lines.get(pos))) {
+            description.append(lines.get(pos) + "\n");
             pos++;
         }
-        return description.trim();
+        return description.toString().trim();
     }
 
     public String getFeatureName() {
-        int pos = 0;
-        while (pos < lines.size() && !GherkinUtils.isFeatureTitle(lines.get(pos))) {
-            pos++;
-        }
-        return lines.get(pos).replaceFirst("Feature:", "").trim();
+        String titleLine = lines.stream()
+                .filter(GherkinUtils::isFeatureTitle)
+                .findFirst().get();
+        return titleLine.substring(titleLine.indexOf(":") + 1);
     }
 }
