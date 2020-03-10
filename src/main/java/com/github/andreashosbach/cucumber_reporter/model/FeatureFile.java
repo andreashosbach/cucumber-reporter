@@ -17,7 +17,7 @@ public class FeatureFile {
     }
 
     public String getLine(int lineNumber) {
-        return lines.get(lineNumber - 1);
+        return lines.get(lineNumber - 1).trim();
     }
 
     public String getFeatureDescription() {
@@ -28,9 +28,10 @@ public class FeatureFile {
         pos++;
 
         StringBuilder description = new StringBuilder();
-        while (pos < lines.size() && !GherkinUtils.isScenarioTitle(lines.get(pos)) && GherkinUtils.startsWithTag(lines.get(pos))) {
-            if (!GherkinUtils.isComment(lines.get(pos)))
-                description.append(lines.get(pos)).append("\n");
+        while (pos < lines.size() && !GherkinUtils.isScenarioTitle(lines.get(pos)) && !GherkinUtils.startsWithTag(lines.get(pos))) {
+            if (!GherkinUtils.isComment(lines.get(pos))) {
+                description.append(lines.get(pos).trim()).append("\n");
+            }
             pos++;
         }
         return description.toString().trim();
@@ -38,9 +39,11 @@ public class FeatureFile {
 
     public String getScenarioDescription(int scenarioTitleLine) {
         StringBuilder description = new StringBuilder();
-        int pos = scenarioTitleLine + 1;
+        int pos = scenarioTitleLine;
         while (pos < lines.size() && !GherkinUtils.isStep(lines.get(pos))) {
-            description.append(lines.get(pos)).append("\n");
+            if (!GherkinUtils.isComment(lines.get(pos))) {
+                description.append(lines.get(pos).trim()).append("\n");
+            }
             pos++;
         }
         return description.toString().trim();

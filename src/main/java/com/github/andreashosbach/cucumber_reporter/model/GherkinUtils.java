@@ -9,17 +9,17 @@ public class GherkinUtils {
     private static final String COMMENT_CHAR = "#";
     private static final String TAG_CHAR = "@";
 
-    public static boolean isFeatureTitle(String line){
+    public static boolean isFeatureTitle(String line) {
         final String l = line.trim();
-        return  Arrays.stream(FEATURE_KEYWORDS).anyMatch(l::startsWith);
+        return Arrays.stream(FEATURE_KEYWORDS).anyMatch(l::startsWith);
     }
 
     public static boolean isScenarioTitle(String line) {
         final String l = line.trim();
-        return  Arrays.stream(SCENARIO_KEYWORDS).anyMatch(l::startsWith);
+        return Arrays.stream(SCENARIO_KEYWORDS).anyMatch(l::startsWith);
     }
 
-    public static boolean startsWithTag(String line){
+    public static boolean startsWithTag(String line) {
         return line.trim().startsWith(TAG_CHAR);
     }
 
@@ -29,6 +29,6 @@ public class GherkinUtils {
 
     public static boolean isStep(String line) {
         final String l = line.trim();
-        return Arrays.stream(STEP_KEYWORDS).noneMatch(l::startsWith);
+        return Arrays.stream(STEP_KEYWORDS).anyMatch(l::startsWith);
     }
 }
