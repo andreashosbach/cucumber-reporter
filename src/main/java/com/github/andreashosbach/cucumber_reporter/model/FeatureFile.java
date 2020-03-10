@@ -50,6 +50,6 @@ public class FeatureFile {
         String titleLine = lines.stream()
                 .filter(GherkinUtils::isFeatureTitle)
                 .findFirst().orElseThrow(() -> new IllegalStateException("Feature title not found"));
-        return titleLine.substring(titleLine.indexOf(":") + 1);
+        return titleLine.substring(titleLine.indexOf(":") + 1).trim();
     }
 }
