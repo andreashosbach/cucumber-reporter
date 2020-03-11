@@ -1,5 +1,8 @@
 package com.github.andreashosbach.cucumber_reporter.model;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,9 +21,12 @@ public class Screenshot {
     private static byte[] defaultImage;
 
     static {
-        try {
-            defaultImage = Files.readAllBytes(Paths.get("src/test/resources/no-image.png"));
-        } catch (IOException e) {
+        try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            BufferedImage image = ImageIO.read(Screenshot.class.getResource("/no-image.png"));
+            ImageIO.write( image, "png", baos );
+            baos.flush();
+            defaultImage = baos.toByteArray();
+        } catch (Exception e) {
             logger.severe("Could not load default image for screenshots");
             throw new RuntimeException(e);
         }

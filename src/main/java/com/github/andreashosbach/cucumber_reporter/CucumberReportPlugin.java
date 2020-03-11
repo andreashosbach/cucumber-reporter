@@ -1,6 +1,6 @@
 package com.github.andreashosbach.cucumber_reporter;
 
-import com.github.andreashosbach.cucumber_reporter.event_handler.CucumberFormatterEventHandler;
+import com.github.andreashosbach.cucumber_reporter.event_handler.CucumberEventHandler;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
 
@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public final class CucumberReportPlugin implements EventListener {
-    private final CucumberFormatterEventHandler eventHandler;
+    private final CucumberEventHandler eventHandler;
 
     private EventHandler<TestSourceRead> testSourceReadHandler = new EventHandler<TestSourceRead>() {
         @Override
@@ -70,7 +70,7 @@ public final class CucumberReportPlugin implements EventListener {
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
     public CucumberReportPlugin(String out) {
         String build = "Build-" + new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
-        eventHandler = new CucumberFormatterEventHandler("branch", build, "1.0", out);
+        eventHandler = new CucumberEventHandler("branch", build, "1.0", out);
     }
 
     @Override

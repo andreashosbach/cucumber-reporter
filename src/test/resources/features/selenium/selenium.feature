@@ -1,7 +1,7 @@
 Feature: Very simple feature
 
     Background: Browser Version
-    Given the website "about:version" is displayed
+    Given a webbrowser
 
   Scenario: Checking Wikipedia
     Given the website "https://en.wikipedia.org/wiki/Water_pipit" is displayed

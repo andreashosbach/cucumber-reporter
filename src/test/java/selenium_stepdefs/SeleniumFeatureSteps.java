@@ -46,6 +46,11 @@ public class SeleniumFeatureSteps {
         webDriver.quit();
     }
 
+    @Given("a webbrowser")
+    public void theWebsite() {
+        webDriver.navigate().to("about:version");
+    }
+
     @Given("the website {string} is displayed")
     public void theWebsite(String url) {
         webDriver.navigate().to(url);
