@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public final class ScenariooDocumentationGenerator {
-
     private static final Logger logger = Logger.getGlobal();
 
     private ScenarioDocuWriter writer;

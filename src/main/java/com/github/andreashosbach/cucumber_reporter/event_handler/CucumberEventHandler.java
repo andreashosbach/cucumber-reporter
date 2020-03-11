@@ -2,24 +2,11 @@ package com.github.andreashosbach.cucumber_reporter.event_handler;
 
 import com.github.andreashosbach.cucumber_reporter.ScenariooDocumentationGenerator;
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
-import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
-import com.github.andreashosbach.cucumber_reporter.model.mapper.*;
 import io.cucumber.plugin.event.*;
-import org.scenarioo.api.ScenarioDocuWriter;
-import org.scenarioo.api.exception.ScenarioDocuSaveException;
-import org.scenarioo.model.docu.entities.Status;
-import org.scenarioo.model.docu.entities.Step;
-import org.scenarioo.model.docu.entities.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public final class CucumberEventHandler {
-
     private static final Logger logger = Logger.getGlobal();
 
     private String outputDirectory;

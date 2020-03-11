@@ -3,9 +3,6 @@ package com.github.andreashosbach.cucumber_reporter.model;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -21,9 +18,9 @@ public class Screenshot {
     private static byte[] defaultImage;
 
     static {
-        try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             BufferedImage image = ImageIO.read(Screenshot.class.getResource("/no-image.png"));
-            ImageIO.write( image, "png", baos );
+            ImageIO.write(image, "png", baos);
             baos.flush();
             defaultImage = baos.toByteArray();
         } catch (Exception e) {
@@ -37,7 +34,7 @@ public class Screenshot {
         this.image = image;
     }
 
-    public static void reset(){
+    public static void reset() {
         screenshots = new ArrayList<>();
         logger.info("Screenshot list reset");
     }

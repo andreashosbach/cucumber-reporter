@@ -8,7 +8,6 @@ public class UseCaseMapper {
         UseCase useCase = new UseCase();
         useCase.setName(featureFile.getFeatureName());
         useCase.setDescription(featureFile.getFeatureDescription());
-        //TODO get Tags from feature
         return useCase;
     }
 
