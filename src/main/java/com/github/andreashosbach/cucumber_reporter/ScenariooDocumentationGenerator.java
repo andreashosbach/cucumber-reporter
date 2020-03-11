@@ -22,11 +22,6 @@ public final class ScenariooDocumentationGenerator {
 
     private ScenarioDocuWriter writer;
 
-    private String outputDirectory;
-    private String branchName;
-    private String buildName;
-    private String revision;
-
     private FeatureFiles featureFiles;
 
     private Branch currentBranch;
@@ -39,13 +34,8 @@ public final class ScenariooDocumentationGenerator {
     private FeatureFile currentFeatureFile;
 
     public ScenariooDocumentationGenerator(String branchName, String buildName, String revision, String outputDirectory) {
-        this.outputDirectory = outputDirectory;
-        this.branchName = branchName;
-        this.buildName = buildName;
-        this.revision = revision;
-
         featureFiles = new FeatureFiles();
-        createOutputDirectory();
+        createOutputDirectory(outputDirectory);
         writer = new ScenarioDocuWriter(new File(outputDirectory), branchName, buildName);
 
         currentBranch = BranchMapper.mapBranch(branchName);
@@ -54,7 +44,7 @@ public final class ScenariooDocumentationGenerator {
         logger.info(String.format("Bulid '%s', Revivision '%s'", buildName, revision));
     }
 
-    private void createOutputDirectory() {
+    private void createOutputDirectory(String outputDirectory) {
         if (Files.notExists(Paths.get(outputDirectory))) {
             try {
                 Files.createDirectories(Paths.get(outputDirectory));
@@ -96,7 +86,6 @@ public final class ScenariooDocumentationGenerator {
             currentUseCase.setStatus(aggregatedScenarioStatus);
             writer.saveUseCase(currentUseCase);
             logger.fine(String.format("UseCase '%s' finished", currentUseCase.getName()));
-
         }
         currentUseCase = null;
     }
