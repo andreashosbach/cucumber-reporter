@@ -108,30 +108,34 @@ public final class ScenariooDocumentationGenerator {
     }
 
     public void gherkinStepStarted(PickleStepTestStep step) {
+        if(currentStep != null){
+            logger.severe("Step not finished probably missing AFTER_STEP hook");
+        }
         currentStepIndex++;
         currentStep = StepMapper.mapStep(step, currentFeatureFile);
         currentStep.getStepDescription().setIndex(currentStepIndex);
-        logger.fine(String.format("PickleStep '%s' started", currentStep.getStepDescription().getTitle()));
+        logger.fine(String.format("Gherkin step '%s' started", currentStep.getStepDescription().getTitle()));
     }
 
     public void hookStepStarted(HookTestStep step) {
-        logger.fine(String.format("HookSTep '%s' started", step.getHookType().toString()));
+        logger.fine(String.format("Hook step '%s' started", step.getHookType().toString()));
     }
 
     public void gherkinStepFinished(PickleStepTestStep step) {
         // Save only on the after hook
-        logger.fine(String.format("PickleStep '%s' finished", currentStep.getStepDescription().getTitle()));
+        logger.fine(String.format("Gherkin step '%s' finished expecting AFTER_STEP hook", currentStep.getStepDescription().getTitle()));
     }
 
     public void hookStepFinished(HookTestStep step) {
         if (step.getHookType() == HookType.AFTER_STEP) {
-            logger.fine(String.format("HookStep '%s 'for '%s' finished", step.getHookType().toString(), currentStep.getStepDescription().getTitle()));
+            logger.fine(String.format("Hook step '%s 'for '%s' finished", step.getHookType().toString(), currentStep.getStepDescription().getTitle()));
             Page page = new Page();
             page.setName(Screenshot.getPageName(currentStepIndex));
             currentStep.setPage(page);
             writer.saveStep(currentUseCase, currentScenario, currentStep);
             writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage(currentStepIndex));
             logger.fine(String.format("Written data for Step '%s' ", currentStep.getStepDescription().getTitle()));
+            currentStep = null;
         }
     }
 
