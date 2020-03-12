@@ -1,6 +1,5 @@
 package stepdefs;
 
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -19,12 +18,12 @@ public class FeatureSteps {
     }
 
     @Then("nothing is ok")
-    public void nothingIsOk() throws Throwable {
+    public void nothingIsOk() {
         fail("This failed!");
     }
 
     @And("this is skipped")
-    public void thisIsSkipped() throws Throwable {
+    public void thisIsSkipped() {
         // Write code here that turns the phrase above into concrete actions
         throw new RuntimeException();
     }

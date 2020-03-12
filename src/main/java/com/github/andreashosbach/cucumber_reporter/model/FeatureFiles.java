@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureFiles {
-    private List<FeatureFile> featureFiles = new ArrayList<>();
+    private final List<FeatureFile> featureFiles = new ArrayList<>();
 
     public void addFeatureFile(FeatureFile featureFile){
         featureFiles.add(featureFile);

@@ -9,10 +9,10 @@ import java.util.logging.Logger;
 public final class CucumberEventHandler {
     private static final Logger logger = Logger.getGlobal();
 
-    private String outputDirectory;
-    private String branchName;
-    private String buildName;
-    private String revision;
+    private final String outputDirectory;
+    private final String branchName;
+    private final String buildName;
+    private final String revision;
 
     private ScenariooDocumentationGenerator docGenerator;
 

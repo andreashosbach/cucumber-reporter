@@ -15,7 +15,7 @@ public class Screenshot {
     private byte[] image;
     private String pageName;
 
-    private static byte[] defaultImage;
+    private static final byte[] defaultImage;
 
     static {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {

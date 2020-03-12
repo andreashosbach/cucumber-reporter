@@ -3,7 +3,7 @@ package com.github.andreashosbach.cucumber_reporter;
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
 import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
 import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
-import com.github.andreashosbach.cucumber_reporter.model.mapper.*;
+import com.github.andreashosbach.cucumber_reporter.mapper.*;
 import io.cucumber.plugin.event.*;
 import org.scenarioo.api.ScenarioDocuWriter;
 import org.scenarioo.api.exception.ScenarioDocuSaveException;
@@ -20,12 +20,13 @@ import java.util.logging.Logger;
 public final class ScenariooDocumentationGenerator {
     private static final Logger logger = Logger.getGlobal();
 
-    private ScenarioDocuWriter writer;
+    private final ScenarioDocuWriter writer;
 
-    private FeatureFiles featureFiles;
+    private final FeatureFiles featureFiles;
 
-    private Branch currentBranch;
-    private Build currentBuild;
+    private final Branch branch;
+    private final Build build;
+
     private UseCase currentUseCase;
     private Scenario currentScenario;
     private Status aggregatedScenarioStatus;
@@ -38,9 +39,9 @@ public final class ScenariooDocumentationGenerator {
         createOutputDirectory(outputDirectory);
         writer = new ScenarioDocuWriter(new File(outputDirectory), branchName, buildName);
 
-        currentBranch = BranchMapper.mapBranch(branchName);
+        branch = BranchMapper.mapBranch(branchName);
         logger.info(String.format("Branch '%s'", branchName));
-        currentBuild = BuildMapper.mapBuild(buildName, revision);
+        build = BuildMapper.mapBuild(buildName, revision);
         logger.info(String.format("Bulid '%s', Revivision '%s'", buildName, revision));
     }
 
@@ -57,8 +58,8 @@ public final class ScenariooDocumentationGenerator {
     }
 
     public void finish() {
-        writer.saveBranchDescription(currentBranch);
-        writer.saveBuildDescription(currentBuild);
+        writer.saveBranchDescription(branch);
+        writer.saveBuildDescription(build);
 
         try {
             writer.flush();
@@ -91,7 +92,7 @@ public final class ScenariooDocumentationGenerator {
     }
 
     public void scenarioStarted(TestCase testCase) {
-        currentScenario = currentScenario = ScenarioMapper.mapScenario(testCase, currentFeatureFile);
+        currentScenario = ScenarioMapper.mapScenario(testCase, currentFeatureFile);
         currentStepIndex = -1;
         Screenshot.reset();
         logger.fine(String.format("Scenario '%s' started", currentScenario.getName()));

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FeatureFile {
-    private String uri;
-    private List<String> lines;
+    private final String uri;
+    private final List<String> lines;
 
     public FeatureFile(String uri, String code) {
         this.uri = uri;

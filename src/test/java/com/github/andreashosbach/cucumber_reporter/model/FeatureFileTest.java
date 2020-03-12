@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FeatureFileTest {
 
-    FeatureFile featureFile;
+    private FeatureFile featureFile;
 
     @BeforeEach
     void setUp() {

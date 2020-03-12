@@ -10,57 +10,57 @@ import java.util.Date;
 public final class CucumberReportPlugin implements EventListener {
     private final CucumberEventHandler eventHandler;
 
-    private EventHandler<TestSourceRead> testSourceReadHandler = new EventHandler<TestSourceRead>() {
+    private final EventHandler<TestSourceRead> testSourceReadHandler = new EventHandler<TestSourceRead>() {
         @Override
         public void receive(TestSourceRead event) {
             eventHandler.handleTestSourceRead(event);
         }
     };
-    private EventHandler<TestCaseStarted> caseStartedHandler = new EventHandler<TestCaseStarted>() {
+    private final EventHandler<TestCaseStarted> caseStartedHandler = new EventHandler<TestCaseStarted>() {
         @Override
         public void receive(TestCaseStarted event) {
             eventHandler.handleTestCaseStarted(event);
         }
     };
-    private EventHandler<TestCaseFinished> caseFinishedHandler = new EventHandler<TestCaseFinished>() {
+    private final EventHandler<TestCaseFinished> caseFinishedHandler = new EventHandler<TestCaseFinished>() {
         @Override
         public void receive(TestCaseFinished event) {
             eventHandler.handleTestCaseFinished(event);
         }
     };
 
-    private EventHandler<TestStepStarted> stepStartedHandler = new EventHandler<TestStepStarted>() {
+    private final EventHandler<TestStepStarted> stepStartedHandler = new EventHandler<TestStepStarted>() {
         @Override
         public void receive(TestStepStarted event) {
             eventHandler.handleTestStepStarted(event);
         }
     };
-    private EventHandler<TestStepFinished> stepFinishedHandler = new EventHandler<TestStepFinished>() {
+    private final EventHandler<TestStepFinished> stepFinishedHandler = new EventHandler<TestStepFinished>() {
         @Override
         public void receive(TestStepFinished event) {
             eventHandler.handleTestStepFinished(event);
         }
     };
-    private EventHandler<TestRunStarted> runStartedHandler = new EventHandler<TestRunStarted>() {
+    private final EventHandler<TestRunStarted> runStartedHandler = new EventHandler<TestRunStarted>() {
         @Override
         public void receive(TestRunStarted event) {
             eventHandler.startReport();
         }
     };
 
-    private EventHandler<TestRunFinished> runFinishedHandler = new EventHandler<TestRunFinished>() {
+    private final EventHandler<TestRunFinished> runFinishedHandler = new EventHandler<TestRunFinished>() {
         @Override
         public void receive(TestRunFinished event) {
             eventHandler.finishReport();
         }
     };
-    private EventHandler<WriteEvent> writeEventhandler = new EventHandler<WriteEvent>() {
+    private final EventHandler<WriteEvent> writeEventhandler = new EventHandler<WriteEvent>() {
         @Override
         public void receive(WriteEvent event) {
             eventHandler.handleWrite(event);
         }
     };
-    private EventHandler<EmbedEvent> embedEventhandler = new EventHandler<EmbedEvent>() {
+    private final EventHandler<EmbedEvent> embedEventhandler = new EventHandler<EmbedEvent>() {
         @Override
         public void receive(EmbedEvent event) {
             eventHandler.handleEmbed(event);

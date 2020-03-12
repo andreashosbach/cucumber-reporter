@@ -7,10 +7,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SeleniumFeatureSteps {
 
@@ -47,7 +45,7 @@ public class SeleniumFeatureSteps {
     }
 
     @Given("a webbrowser")
-    public void theWebsite() {
+    public void aWebbrowser() {
         webDriver.navigate().to("about:version");
     }
 
@@ -65,5 +63,21 @@ public class SeleniumFeatureSteps {
     @Then("the website with title {string} should be displayed")
     public void theWebsiteWithTitleIsDisplayed(String title) {
         assertEquals(title, webDriver.getTitle());
+    }
+
+
+    @Given("the text {string} is entered in the field {string}")
+    public void theTextIsEnteredInTheField(String text, String fieldId){
+        webDriver.findElement(By.id(fieldId)).sendKeys(text);
+    }
+
+    @When("the submit button is clicked")
+    public void theButtonIsClicked(){
+        webDriver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
+    }
+
+    @Then("a page containing the following text should be displayed")
+    public void aPageContainingTheFollowingTextShouldBeDisplayed(String text){
+        assertTrue(webDriver.findElement(By.tagName("body")).getText().contains(text.replaceAll("\n", " ")));
     }
 }
