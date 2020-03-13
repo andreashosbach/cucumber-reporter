@@ -14,7 +14,9 @@ public class StepMapper {
         details.addDetail("glue_code", testStep.getCodeLocation());
         details.addDetail("pattern", testStep.getPattern());
         details.addDetail("uri", testStep.getUri());
-        stepDescription.setTitle(featureFile.getLine(testStep.getStep().getLine()).trim());
+        details.addDetail("line", testStep.getStep().getLine());
+        details.addDetail("keyword", testStep.getStep().getKeyWord());
+        stepDescription.setTitle(featureFile.getStep(testStep.getStep().getLine()).trim());
         stepDescription.setDetails(details);
         step.setStepDescription(stepDescription);
         return step;

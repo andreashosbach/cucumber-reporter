@@ -13,6 +13,8 @@ public class ScenarioMapper {
         Details details = new Details();
         details.addDetail("id", testCase.getId());
         details.addDetail("uri", testCase.getUri());
+        details.addDetail("line", testCase.getLine());
+        details.addDetail("keyword", testCase.getKeyword());
         scenario.setDetails(details);
         testCase.getTags().forEach(t -> scenario.addLabel(sanitizeTag(t)));
         return scenario;

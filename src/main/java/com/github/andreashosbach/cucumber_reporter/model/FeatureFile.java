@@ -20,6 +20,21 @@ public class FeatureFile {
         return lines.get(lineNumber - 1).trim();
     }
 
+    public String getStep(int lineNumber) {
+        StringBuilder step = new StringBuilder();
+        int i = lineNumber;
+        do {
+            step.append(getLine(i)).append('\n');
+            i++;
+        } while (i <= lines.size()
+                && !GherkinUtils.isStep(getLine(i))
+                && !GherkinUtils.isScenarioTitle(getLine(i))
+                && !GherkinUtils.isComment(getLine(i))
+                && !GherkinUtils.startsWithTag(getLine(i)));
+
+        return step.toString().trim();
+    }
+
     public String getFeatureDescription() {
         int pos = 0;
         while (pos < lines.size() && !GherkinUtils.isFeatureTitle(lines.get(pos))) {
