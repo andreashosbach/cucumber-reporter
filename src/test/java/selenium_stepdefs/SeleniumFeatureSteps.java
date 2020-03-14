@@ -54,7 +54,7 @@ public class SeleniumFeatureSteps {
         webDriver.navigate().to(url);
     }
 
-    @When("the link {string} is clicked")
+    @When("the user clicks on the link {string}")
     public void theLinkIsClicked(String linkText) {
         WebDriverWait wait = new WebDriverWait(webDriver, 5);
         wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText))).click();
@@ -66,12 +66,12 @@ public class SeleniumFeatureSteps {
     }
 
 
-    @Given("the text {string} is entered in the field {string}")
+    @Given("the user enters {string} into the field {string}")
     public void theTextIsEnteredInTheField(String text, String fieldId){
         webDriver.findElement(By.id(fieldId)).sendKeys(text);
     }
 
-    @When("the submit button is clicked")
+    @When("the user clicks on the submit button")
     public void theButtonIsClicked(){
         webDriver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
     }

@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public final class ScenariooDocumentationGenerator {
@@ -122,17 +124,27 @@ public final class ScenariooDocumentationGenerator {
         logger.fine(String.format("Hook step '%s' started", step.getHookType().toString()));
     }
 
-    public void gherkinStepFinished(PickleStepTestStep step) {
+    public void gherkinStepFinished(PickleStepTestStep step, Result result) {
         // Save only on the after hook
+        Status status = mapResult(result);
+        currentStep.getStepDescription().setStatus(status);
+        currentStep.getStepDescription().addDetail("step_duration", mapDuration(result.getDuration()));
         logger.fine(String.format("Gherkin step '%s' finished expecting AFTER_STEP hook", currentStep.getStepDescription().getTitle()));
     }
 
-    public void hookStepFinished(HookTestStep step) {
+
+    public void hookStepFinished(HookTestStep step, Result result) {
         if (step.getHookType() == HookType.AFTER_STEP) {
             logger.fine(String.format("Hook step '%s 'for '%s' finished", step.getHookType().toString(), currentStep.getStepDescription().getTitle()));
             Page page = new Page();
             page.setName(Screenshot.getPageName(currentStepIndex));
             currentStep.setPage(page);
+            Status status = mapResult(result);
+            currentStep.getStepDescription().addDetail(step.getHookType() + "_duration", mapDuration(result.getDuration()));
+            if(status == Status.FAILED){
+                logger.fine("Hook step failed, set step status to failed");
+                currentStep.getStepDescription().setStatus(status);
+            }
             writer.saveStep(currentUseCase, currentScenario, currentStep);
             writer.saveScreenshotAsPng(currentUseCase.getName(), currentScenario.getName(), currentStepIndex, Screenshot.getScreenshotImage(currentStepIndex));
             logger.fine(String.format("Written data for Step '%s' ", currentStep.getStepDescription().getTitle()));
@@ -140,14 +152,22 @@ public final class ScenariooDocumentationGenerator {
         }
     }
 
+    private String mapDuration(Duration duration) {
+        return String.format("%d s %d ms", duration.getSeconds(), TimeUnit.MILLISECONDS.convert(duration.getNano(), TimeUnit.NANOSECONDS));
+    }
+
     private Status mapResult(Result result) {
         Status status = StatusMapper.mapStatus(result);
-
-        if (aggregatedScenarioStatus == null) {
-            aggregatedScenarioStatus = status;
-        } else if (status == Status.FAILED) {
-            aggregatedScenarioStatus = Status.FAILED;
-        }
+        aggregatedScenarioStatus = aggregateStatus(aggregatedScenarioStatus, status);
         return status;
+    }
+
+    private Status aggregateStatus(Status currentStatus, Status newStatus){
+        if (currentStatus == null) {
+            return  newStatus;
+        } else if (newStatus == Status.FAILED) {
+            return  newStatus;
+        }
+        return currentStatus;
     }
 }

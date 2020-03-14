@@ -70,9 +70,9 @@ public final class CucumberEventHandler {
             e.printStackTrace();
         }
         if (event.getTestStep() instanceof PickleStepTestStep) {
-            docGenerator.gherkinStepFinished((PickleStepTestStep) event.getTestStep());
+            docGenerator.gherkinStepFinished((PickleStepTestStep) event.getTestStep(), event.getResult());
         } else if (event.getTestStep() instanceof HookTestStep) {
-            docGenerator.hookStepFinished((HookTestStep) event.getTestStep());
+            docGenerator.hookStepFinished((HookTestStep) event.getTestStep(), event.getResult());
         } else {
             logger.severe("Unknown step type encountered in handleTestStepFinished()");
             throw new IllegalStateException("Unknown step type");
