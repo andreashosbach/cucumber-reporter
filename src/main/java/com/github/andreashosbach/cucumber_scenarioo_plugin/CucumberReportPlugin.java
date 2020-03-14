@@ -1,6 +1,6 @@
-package com.github.andreashosbach.cucumber_reporter;
+package com.github.andreashosbach.cucumber_scenarioo_plugin;
 
-import com.github.andreashosbach.cucumber_reporter.event_handler.CucumberEventHandler;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.event_handler.CucumberEventHandler;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
 

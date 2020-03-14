@@ -10,7 +10,7 @@ import java.util.logging.SimpleFormatter;
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/test/resources/features/selenium",
         glue = "selenium_stepdefs",
-        plugin = "com.github.andreashosbach.cucumber_reporter.CucumberReportPlugin:target/scenarioo/selenium",
+        plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberReportPlugin:target/scenarioo/selenium",
         strict = true)
 public class SeleniumFeatureCucumberRunner {
     static{

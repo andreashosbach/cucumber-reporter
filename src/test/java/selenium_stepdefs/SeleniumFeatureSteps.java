@@ -1,6 +1,6 @@
 package selenium_stepdefs;
 
-import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.Screenshot;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;

@@ -5,12 +5,34 @@
 
 
 	<groupId>com.github.andreashosbach</groupId>
-	<artifactId>cucumber-reporter</artifactId>
+	<artifactId>cucumber-scenarioo-plugin</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>cucumber-reporter</name>
-	<url>http://maven.apache.org</url>
+	<name>cucumber-scenario-plugin</name>
+	<description>Creating Scenarioo documentation from cucumber tests</description>
+	<url>https://github.com/andreashosbach/cucumber-reporter</url>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Andreas Hosbach</name>
+			<email>andreas.hosbach@gmail.com</email>
+			<organizationUrl>http://www.github.com/andreashosbach</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/andreashosbach/cucumber-reporter.git</connection>
+		<developerConnection>scm:git:ssh://github.com:andreashosbach/cucumber-reporter.git</developerConnection>
+		<url>http://github.com/andreashosbach/cucumber-reporter</url>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

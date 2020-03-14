@@ -1,9 +1,9 @@
-package com.github.andreashosbach.cucumber_reporter;
+package com.github.andreashosbach.cucumber_scenarioo_plugin;
 
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFiles;
-import com.github.andreashosbach.cucumber_reporter.model.Screenshot;
-import com.github.andreashosbach.cucumber_reporter.mapper.*;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFiles;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.Screenshot;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.mapper.*;
 import io.cucumber.plugin.event.*;
 import org.scenarioo.api.ScenarioDocuWriter;
 import org.scenarioo.api.exception.ScenarioDocuSaveException;

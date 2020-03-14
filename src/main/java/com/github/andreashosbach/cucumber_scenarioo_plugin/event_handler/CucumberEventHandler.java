@@ -1,7 +1,7 @@
-package com.github.andreashosbach.cucumber_reporter.event_handler;
+package com.github.andreashosbach.cucumber_scenarioo_plugin.event_handler;
 
-import com.github.andreashosbach.cucumber_reporter.ScenariooDocumentationGenerator;
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.ScenariooDocumentationGenerator;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
 import io.cucumber.plugin.event.*;
 
 import java.util.logging.Logger;

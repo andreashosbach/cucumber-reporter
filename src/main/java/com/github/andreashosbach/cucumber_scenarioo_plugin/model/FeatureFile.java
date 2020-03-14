@@ -1,4 +1,4 @@
-package com.github.andreashosbach.cucumber_reporter.model;
+package com.github.andreashosbach.cucumber_scenarioo_plugin.model;
 
 import java.util.Arrays;
 import java.util.List;

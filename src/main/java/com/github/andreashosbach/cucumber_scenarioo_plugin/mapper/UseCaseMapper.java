@@ -1,6 +1,6 @@
-package com.github.andreashosbach.cucumber_reporter.mapper;
+package com.github.andreashosbach.cucumber_scenarioo_plugin.mapper;
 
-import com.github.andreashosbach.cucumber_reporter.model.FeatureFile;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
 import org.scenarioo.model.docu.entities.UseCase;
 
 public class UseCaseMapper {

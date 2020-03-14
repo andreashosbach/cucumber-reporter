@@ -1,4 +1,4 @@
-package com.github.andreashosbach.cucumber_reporter.mapper;
+package com.github.andreashosbach.cucumber_scenarioo_plugin.mapper;
 
 import org.scenarioo.model.docu.entities.Build;
 
