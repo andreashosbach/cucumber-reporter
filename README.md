@@ -2,7 +2,7 @@
 *Generate Scenarioo documentation from cucumber tests.*
 
 ## Using the plugin
-####Add the dependency to your pom.xml
+###Add the dependency to your pom.xml
 Currently you have to download and compile the sources locally first.
 
 	<dependency>
@@ -11,14 +11,14 @@ Currently you have to download and compile the sources locally first.
 		<version>0.0.1</version>
 	</dependency>
 
-####Add the plugin to the Cucumber test runner: 
+###Add the plugin to the Cucumber test runner: 
 
     @RunWith(Cucumber.class)
     @CucumberOptions(  ...
         plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberReportPlugin:target/scenarioo"
     ...)
 
-####Define an after step hook where you take a screenshot and save it with *Screenshot.save(...)*.
+###Define an after step hook where you take a screenshot and save it with *Screenshot.save(...)*.
   
 Example with Selenium:
   
