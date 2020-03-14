@@ -1,8 +1,11 @@
 # cucumber-scenarioo-plugin
+
 *Generate Scenarioo documentation from cucumber tests.*
 
 ## Using the plugin
-###Add the dependency to your pom.xml
+
+####Add the dependency to your pom.xml
+
 Currently you have to download and compile the sources locally first.
 
 	<dependency>
@@ -11,14 +14,14 @@ Currently you have to download and compile the sources locally first.
 		<version>0.0.1</version>
 	</dependency>
 
-###Add the plugin to the Cucumber test runner: 
+####Add the plugin to the Cucumber test runner
 
     @RunWith(Cucumber.class)
     @CucumberOptions(  ...
         plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberReportPlugin:target/scenarioo"
     ...)
 
-###Define an after step hook where you take a screenshot and save it with *Screenshot.save(...)*.
+####Define an after step hook where you take a screenshot and save it with *Screenshot.save(...)*
   
 Example with Selenium:
   
@@ -34,6 +37,7 @@ saved in the same order as the steps are executed. But there has to be an after 
 step in the plugin.)
 
 ## Scenarioo
+
 The results can be displayed with [Scenarioo](http://scenarioo.org/)
 
 To run Scenarioo in Docker the [Scenarioo documentation](http://scenarioo.org/docs/master/tutorial/Scenarioo-Viewer-Docker-Image.html)
