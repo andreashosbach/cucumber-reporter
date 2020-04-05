@@ -1,83 +1,51 @@
 package selenium_stepdefs;
 
-import com.github.andreashosbach.cucumber_scenarioo_plugin.model.Screenshot;
-import io.cucumber.java.After;
-import io.cucumber.java.AfterStep;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class SeleniumFeatureSteps {
-
-    private WebDriver webDriver;
-
-    @AfterStep
-    public void afterStep() {
-        TakesScreenshot scrShot = ((TakesScreenshot) webDriver);
-        Screenshot.save(webDriver.getTitle(), scrShot.getScreenshotAs(OutputType.BYTES));
-    }
-
-    @Before
-    public void setupDriver() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
-        webDriver = new ChromeDriver();
-
-        webDriver.manage().window().maximize();
-
-        webDriver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
-        webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    }
-
-    @After
-    public void cleanupDriver() {
-        webDriver.close();
-        webDriver.quit();
-    }
+public class SeleniumFeatureSteps extends StepDefinitionBase {
 
     @Given("a webbrowser")
     public void aWebbrowser() {
-        webDriver.navigate().to("about:version");
+        getWebDriver().navigate().to("about:version");
     }
 
     @Given("the website {string} is displayed")
     public void theWebsite(String url) {
-        webDriver.navigate().to(url);
+        getWebDriver().navigate().to(url);
     }
 
     @When("the user clicks on the link {string}")
     public void theLinkIsClicked(String linkText) {
-        WebDriverWait wait = new WebDriverWait(webDriver, 5);
+        WebDriverWait wait = new WebDriverWait(getWebDriver(), 5);
         wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText))).click();
     }
 
     @Then("the website with title {string} should be displayed")
     public void theWebsiteWithTitleIsDisplayed(String title) {
-        assertEquals(title, webDriver.getTitle());
+        assertEquals(title, getWebDriver().getTitle());
     }
 
 
     @Given("the user enters {string} into the field {string}")
-    public void theTextIsEnteredInTheField(String text, String fieldId){
-        webDriver.findElement(By.id(fieldId)).sendKeys(text);
+    public void theTextIsEnteredInTheField(String text, String fieldId) {
+        getWebDriver().findElement(By.id(fieldId)).sendKeys(text);
     }
 
     @When("the user clicks on the submit button")
-    public void theButtonIsClicked(){
-        webDriver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
+    public void theButtonIsClicked() {
+        getWebDriver().findElement(By.xpath("//button[@type=\"submit\"]")).click();
     }
 
     @Then("a page containing the following text should be displayed")
-    public void aPageContainingTheFollowingTextShouldBeDisplayed(String text){
-        assertTrue(webDriver.findElement(By.tagName("body")).getText().contains(text.replaceAll("\n", " ")));
+    public void aPageContainingTheFollowingTextShouldBeDisplayed(String text) {
+        assertTrue(getWebDriver().findElement(By.tagName("body")).getText().contains(text.replaceAll("\n", " ")));
     }
 }

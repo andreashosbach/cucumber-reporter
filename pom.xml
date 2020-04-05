@@ -6,7 +6,7 @@
 
 	<groupId>com.github.andreashosbach</groupId>
 	<artifactId>cucumber-scenarioo-plugin</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>cucumber-scenario-plugin</name>

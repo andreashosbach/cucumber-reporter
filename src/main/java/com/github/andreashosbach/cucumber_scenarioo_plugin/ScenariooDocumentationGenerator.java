@@ -106,6 +106,7 @@ public final class ScenariooDocumentationGenerator {
 
     public void scenarioFinished(Result result) {
         currentScenario.setStatus(mapResult(result));
+        currentScenario.addDetail("duration", mapDuration(result.getDuration()));
         writer.saveScenario(currentUseCase, currentScenario);
         logger.fine(String.format("UseCase '%s' finished", currentUseCase.getName()));
     }

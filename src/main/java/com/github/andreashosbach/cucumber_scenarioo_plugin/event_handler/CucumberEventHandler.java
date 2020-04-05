@@ -48,10 +48,12 @@ public final class CucumberEventHandler {
         docGenerator.scenarioStarted(event.getTestCase());
     }
 
+    //End of Feature Element
     public void handleTestCaseFinished(TestCaseFinished event) {
         docGenerator.scenarioFinished(event.getResult());
     }
 
+    // Start of Test Step
     public void handleTestStepStarted(TestStepStarted event) {
         if (event.getTestStep() instanceof PickleStepTestStep) {
             docGenerator.gherkinStepStarted((PickleStepTestStep) event.getTestStep());
@@ -63,6 +65,7 @@ public final class CucumberEventHandler {
         }
     }
 
+    //End of Test Step
     public void handleTestStepFinished(TestStepFinished event) {
         try {
             Thread.sleep(100); // need to wait to avoid task rejection exception in scenarioo writer

@@ -1,13 +1,14 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin;
 
 import com.github.andreashosbach.cucumber_scenarioo_plugin.event_handler.CucumberEventHandler;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.BranchNameGenerator;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.BuildNameGenerator;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.DefaultBranchNameGenerator;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.DefaultBuildNameGenerator;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public final class CucumberReportPlugin implements EventListener {
+public final class CucumberScenariooPlugin implements EventListener {
     private final CucumberEventHandler eventHandler;
 
     private final EventHandler<TestSourceRead> testSourceReadHandler = new EventHandler<TestSourceRead>() {
@@ -67,10 +68,26 @@ public final class CucumberReportPlugin implements EventListener {
         }
     };
 
+    private static BuildNameGenerator buildNameGenerator;
+    private static BranchNameGenerator branchNameGenerator;
+
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
-    public CucumberReportPlugin(String out) {
-        String build = "Build-" + new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
-        eventHandler = new CucumberEventHandler("branch", build, "1.0", out);
+    public CucumberScenariooPlugin(String args) {
+        if (buildNameGenerator == null){
+            buildNameGenerator = new DefaultBuildNameGenerator();
+        }
+        if (branchNameGenerator == null){
+            branchNameGenerator = new DefaultBranchNameGenerator();
+        }
+        eventHandler = new CucumberEventHandler(branchNameGenerator.getBranchName(), buildNameGenerator.getBuildName(), "1.0", args);
+    }
+
+    public static void setBuildNameGenerator(BuildNameGenerator generator) {
+        buildNameGenerator = buildNameGenerator;
+    }
+
+    public static void setBranchNameGenerator(BranchNameGenerator generator) {
+        branchNameGenerator = branchNameGenerator;
     }
 
     @Override

@@ -18,10 +18,10 @@ Currently you have to download and compile the sources locally first.
 
     @RunWith(Cucumber.class)
     @CucumberOptions(  ...
-        plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberReportPlugin:target/scenarioo"
+        plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin:target/scenarioo"
     ...)
 
-####Define an after step hook where you take a screenshot and save it with *Screenshot.save(...)*
+####Define an after step hook where you take a screenshot and save it with Screenshot.save(...)
   
 Example with Selenium:
   
