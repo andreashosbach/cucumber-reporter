@@ -83,11 +83,11 @@ public final class CucumberScenariooPlugin implements EventListener {
     }
 
     public static void setBuildNameGenerator(BuildNameGenerator generator) {
-        buildNameGenerator = buildNameGenerator;
+        buildNameGenerator = generator;
     }
 
     public static void setBranchNameGenerator(BranchNameGenerator generator) {
-        branchNameGenerator = branchNameGenerator;
+        branchNameGenerator = generator;
     }
 
     @Override
