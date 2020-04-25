@@ -7,5 +7,5 @@ import org.junit.runner.RunWith;
         glue = "selenium_stepdefs",
         plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin:target/scenarioo/selenium",
         strict = true)
-public class SeleniumFeatureCucumberRunner {
+public class SeleniumFeatureExample {
 }

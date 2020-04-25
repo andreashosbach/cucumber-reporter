@@ -1,105 +1,131 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
 
-	<groupId>com.github.andreashosbach</groupId>
-	<artifactId>cucumber-scenarioo-plugin</artifactId>
-	<version>0.1.0</version>
-	<packaging>jar</packaging>
+    <groupId>com.github.andreashosbach</groupId>
+    <artifactId>cucumber-scenarioo-plugin</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
 
-	<name>cucumber-scenario-plugin</name>
-	<description>Creating Scenarioo documentation from cucumber tests</description>
-	<url>https://github.com/andreashosbach/cucumber-reporter</url>
+    <name>cucumber-scenario-plugin</name>
+    <description>Creating Scenarioo documentation from cucumber tests</description>
+    <url>https://github.com/andreashosbach/cucumber-reporter</url>
 
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<name>Andreas Hosbach</name>
-			<email>andreas.hosbach@gmail.com</email>
-			<organizationUrl>http://www.github.com/andreashosbach</organizationUrl>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>Andreas Hosbach</name>
+            <email>andreas.hosbach@gmail.com</email>
+            <organizationUrl>http://www.github.com/andreashosbach</organizationUrl>
+        </developer>
+    </developers>
 
-	<scm>
-		<connection>scm:git:git://github.com/andreashosbach/cucumber-reporter.git</connection>
-		<developerConnection>scm:git:ssh://github.com:andreashosbach/cucumber-reporter.git</developerConnection>
-		<url>http://github.com/andreashosbach/cucumber-reporter</url>
-	</scm>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Andreas Hosbach Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/andreashosbach/cucumber-reporter</url>
+        </repository>
+    </distributionManagement>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<cucumber-version>5.1.3</cucumber-version>
-		<gherkin-version>9.0.0</gherkin-version>
-	</properties>
 
-	<dependencies>
+    <scm>
+        <connection>scm:git:git://github.com/andreashosbach/cucumber-reporter.git</connection>
+        <developerConnection>scm:git:ssh://github.com:andreashosbach/cucumber-reporter.git</developerConnection>
+        <url>http://github.com/andreashosbach/cucumber-reporter</url>
+    </scm>
 
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.6.0</version>
-			<scope>test</scope>
-		</dependency>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit-version>5.6.0</junit-version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <cucumber-version>5.1.3</cucumber-version>
+        <gherkin-version>9.0.0</gherkin-version>
+        <scenarioo-version>2.1.1</scenarioo-version>
+        <gherkin-version>9.0.0</gherkin-version>
+        <selenium-version>3.141.59</selenium-version>
+    </properties>
 
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>${cucumber-version}</version>
-		</dependency>
+    <dependencies>
 
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-core</artifactId>
-			<version>${cucumber-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>${cucumber-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>gherkin</artifactId>
-			<version>${gherkin-version}</version>
-		</dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber-version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.scenarioo</groupId>
-			<artifactId>scenarioo-java</artifactId>
-			<version>2.1.1</version>
-		</dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-core</artifactId>
+            <version>${cucumber-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>gherkin</artifactId>
+            <version>${gherkin-version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-core</artifactId>
-			<version>2.3.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
-			<version>2.3.2</version>
-		</dependency>
+        <dependency>
+            <groupId>org.scenarioo</groupId>
+            <artifactId>scenarioo-java</artifactId>
+            <version>${scenarioo-version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>3.141.59</version>
-		</dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
