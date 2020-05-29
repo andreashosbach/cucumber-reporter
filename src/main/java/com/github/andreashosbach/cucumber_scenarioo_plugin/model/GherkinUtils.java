@@ -6,6 +6,7 @@ public class GherkinUtils {
     private static final String[] FEATURE_KEYWORDS = {"Feature:"};
     private static final String[] STEP_KEYWORDS = {"Given ", "When ", "Then ", "And ", "But "};
     private static final String[] SCENARIO_KEYWORDS = {"Scenario:", "Example:", "Background:", "Scenario Outline:"};
+    private static final String[] EXAMPLES_KEYWORDS = {"Examples:"};
     private static final String COMMENT_CHAR = "#";
     private static final String TAG_CHAR = "@";
 
@@ -30,5 +31,10 @@ public class GherkinUtils {
     public static boolean isStep(String line) {
         final String l = line.trim();
         return Arrays.stream(STEP_KEYWORDS).anyMatch(l::startsWith);
+    }
+
+    public static boolean isExamplesStart(String line) {
+        final String l = line.trim();
+        return Arrays.stream(EXAMPLES_KEYWORDS).anyMatch(l::startsWith);
     }
 }

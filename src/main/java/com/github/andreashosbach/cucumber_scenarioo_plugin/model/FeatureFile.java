@@ -30,7 +30,8 @@ public class FeatureFile {
                 && !GherkinUtils.isStep(getLine(i))
                 && !GherkinUtils.isScenarioTitle(getLine(i))
                 && !GherkinUtils.isComment(getLine(i))
-                && !GherkinUtils.startsWithTag(getLine(i)));
+                && !GherkinUtils.startsWithTag(getLine(i))
+                && !GherkinUtils.isExamplesStart(getLine(i)));
 
         return step.toString().trim();
     }
