@@ -14,8 +14,16 @@ Feature: Checking on Wikipedia
     open lowlands in winter.
     """
 
+  Scenario Outline: Different Pipits
+    This shows how outlines are working
+    Given the website <website> is displayed
+    Examples:
+      | website|
+      |  "https://en.wikipedia.org/wiki/Water_pipit"  |
+      |  "https://en.wikipedia.org/wiki/Meadow_pipit" |
 
   Scenario: Digging deeper
     Given the website "https://en.wikipedia.org/wiki/Water_pipit" is displayed
     When the user clicks on the link "passerine"
     Then the website with title "Passerine - Wikipedia" should be displayed
+

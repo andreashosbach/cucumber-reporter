@@ -29,19 +29,21 @@ public class HookSteps extends StepDefinitionBase{
         handler.setFormatter(new SimpleFormatter());
         log.addHandler(handler);
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
-        WebDriver webDriver = new ChromeDriver();
+        if(getWebDriver() == null) {
+            System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
+            WebDriver webDriver = new ChromeDriver();
 
-        webDriver.manage().window().setSize(new Dimension(1024, 768));
+            webDriver.manage().window().setSize(new Dimension(1024, 768));
 
-        webDriver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
-        webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        setWebDriver(webDriver);
+            webDriver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
+            webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+            setWebDriver(webDriver);
+        }
     }
 
     @After
     public void cleanupDriver() {
-        getWebDriver().close();
-        getWebDriver().quit();
+//        getWebDriver().close();
+//        getWebDriver().quit();
     }
 }

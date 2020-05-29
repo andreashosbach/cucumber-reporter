@@ -53,8 +53,12 @@ public class FeatureFile {
     }
 
     public String getScenarioDescription(int scenarioTitleLine) {
-        StringBuilder description = new StringBuilder();
         int pos = scenarioTitleLine;
+        // in case of Scenario Outlines the line given is the one of the example and not the title
+        while (!GherkinUtils.isScenarioTitle(getLine(pos))){
+            pos--;
+        }
+        StringBuilder description = new StringBuilder();
         while (pos < lines.size() && !GherkinUtils.isStep(lines.get(pos))) {
             if (!GherkinUtils.isComment(lines.get(pos))) {
                 description.append(lines.get(pos).trim()).append("\n");
