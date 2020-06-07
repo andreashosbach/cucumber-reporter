@@ -1,9 +1,20 @@
 Feature: Checking on Wikipedia
+  We are checkin out birds
+
+  Especially nice are the *passerines*
+
+  We will see
+  * Water Pipits
+  * Meadow Pipits
 
   Background: Browser Version
     Given a webbrowser
 
   Scenario: Searching a page
+    Searching on Wikipedia
+
+    We should automatically see the description page after the search
+
     Given the website "https://www.wikipedia.org" is displayed
     And the user enters "water pipit" into the field "searchInput"
     When the user clicks on the submit button
@@ -15,7 +26,10 @@ Feature: Checking on Wikipedia
     """
 
   Scenario Outline: Different Pipits
-    This shows how outlines are working
+    Directly jumping to the description pages
+
+    Depending on the run we will see differen *pipits*
+
     Given the website <website> is displayed
     Examples:
       | website|

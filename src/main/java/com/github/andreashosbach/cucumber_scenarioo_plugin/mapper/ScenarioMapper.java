@@ -1,5 +1,6 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin.mapper;
 
+import com.github.andreashosbach.cucumber_scenarioo_plugin.model.DescriptionFormatter;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.GherkinUtils;
 import io.cucumber.plugin.event.TestCase;
@@ -21,12 +22,18 @@ public class ScenarioMapper {
         } else {
             scenario.setName(testCase.getName());
         }
-        scenario.setDescription(featureFile.getScenarioDescription(testCase.getLine()));
+
+        String description = featureFile.getScenarioDescription(testCase.getLine());
+        scenario.setDescription(DescriptionFormatter.getShortDescription(description));
+
+
+
         Details details = new Details();
-        details.addDetail("id", testCase.getId());
-        details.addDetail("uri", testCase.getUri());
-        details.addDetail("line", testCase.getLine());
-        details.addDetail("keyword", testCase.getKeyword());
+        details.addDetail("Id", testCase.getId());
+        details.addDetail("URI", testCase.getUri());
+        details.addDetail("Line", testCase.getLine());
+        details.addDetail("Keyword", testCase.getKeyword());
+        details.addDetail("Long Description", DescriptionFormatter.convertMarkdownToHtml(description));
         scenario.setDetails(details);
         testCase.getTags().forEach(t -> scenario.addLabel(sanitizeTag(t)));
         return scenario;

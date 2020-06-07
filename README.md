@@ -51,6 +51,14 @@ Implement the interface *BuildNameGenerator* and register it before execution in
 Implement the interface *BranchNameGenerator* and register it before execution in the CucumberScenariooPlugin class with
 *CucumberScenariooPlugin.setBranchNameGenerator(new MyBranchNameGenerator())*
 
+## Feature Files
+Guidelines on how to write the *feature files* 
+
+### Description
+The descriptions of *features* and *scenarios* are formatted as following:
+* The first line of a description is the *short description* and will be displayed in lists
+* The whole description (including the first line) is formatted as markdown and visible in the detail under *Long Description*
+
 ## Scenarioo
 
 The results can be displayed with [Scenarioo](http://scenarioo.org/)
