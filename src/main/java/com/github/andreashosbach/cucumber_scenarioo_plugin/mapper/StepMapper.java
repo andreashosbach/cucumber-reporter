@@ -1,7 +1,7 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin.mapper;
 
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
-import io.cucumber.plugin.event.*;
+import io.cucumber.plugin.event.PickleStepTestStep;
 import org.scenarioo.model.docu.entities.Step;
 import org.scenarioo.model.docu.entities.StepDescription;
 import org.scenarioo.model.docu.entities.generic.Details;
@@ -16,7 +16,7 @@ public class StepMapper {
         details.addDetail("uri", testStep.getUri());
         details.addDetail("line", testStep.getStep().getLine());
         details.addDetail("keyword", testStep.getStep().getKeyWord());
-        stepDescription.setTitle(featureFile.getStep(testStep.getStep().getLine()).trim());
+        stepDescription.setTitle(testStep.getStep().getKeyWord() + testStep.getStep().getText());
         stepDescription.setDetails(details);
         step.setStepDescription(stepDescription);
         return step;
