@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(features = "src/test/resources/features/selenium",
         glue = "selenium_stepdefs",
         plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin:target/scenarioo/selenium",
-        strict = true)
+        strict = true,
+        tags = "not @Ignore")
 public class SeleniumFeatureExample {
 }

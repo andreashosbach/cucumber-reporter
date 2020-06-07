@@ -1,5 +1,6 @@
 package selenium_stepdefs;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -47,5 +48,10 @@ public class SeleniumFeatureSteps extends StepDefinitionBase {
     @Then("a page containing the following text should be displayed")
     public void aPageContainingTheFollowingTextShouldBeDisplayed(String text) {
         assertTrue(getWebDriver().findElement(By.tagName("body")).getText().contains(text.replaceAll("\n", " ")));
+    }
+
+    @Given("Dummy step with table")
+    public void dummy(DataTable t){
+
     }
 }

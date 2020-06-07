@@ -11,9 +11,9 @@ Feature: Checking on Wikipedia
     Given a webbrowser
 
   Scenario: Searching a page
-    Searching on Wikipedia
+  Searching on Wikipedia
 
-    We should automatically see the description page after the search
+  We should automatically see the description page after the search
 
     Given the website "https://www.wikipedia.org" is displayed
     And the user enters "water pipit" into the field "searchInput"
@@ -26,18 +26,25 @@ Feature: Checking on Wikipedia
     """
 
   Scenario Outline: Different Pipits
-    Directly jumping to the description pages
+  Directly jumping to the description pages
 
-    Depending on the run we will see differen *pipits*
+  Depending on the run we will see differen *pipits*
 
     Given the website <website> is displayed
     Examples:
-      | website|
-      |  "https://en.wikipedia.org/wiki/Water_pipit"  |
-      |  "https://en.wikipedia.org/wiki/Meadow_pipit" |
+      | website                                      |
+      | "https://en.wikipedia.org/wiki/Water_pipit"  |
+      | "https://en.wikipedia.org/wiki/Meadow_pipit" |
 
   Scenario: Digging deeper
     Given the website "https://en.wikipedia.org/wiki/Water_pipit" is displayed
     When the user clicks on the link "passerine"
     Then the website with title "Passerine - Wikipedia" should be displayed
+
+
+  Scenario: With a table
+    Given Dummy step with table
+      | h1  | h2 | h3 |
+      | "1" | 2  | 3  |
+      | "1" | 2  | 3  |
 
