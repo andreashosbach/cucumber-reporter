@@ -1,12 +1,14 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.configuration.CucumberScenariooPluginConfiguration;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.event_handler.CucumberEventHandler;
-import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.BranchNameGenerator;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.BuildNameGenerator;
-import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.DefaultBranchNameGenerator;
-import com.github.andreashosbach.cucumber_scenarioo_plugin.name_generators.DefaultBuildNameGenerator;
 import io.cucumber.plugin.EventListener;
 import io.cucumber.plugin.event.*;
+
+import java.io.File;
+import java.io.IOException;
 
 public final class CucumberScenariooPlugin implements EventListener {
     private final CucumberEventHandler eventHandler;
@@ -69,25 +71,23 @@ public final class CucumberScenariooPlugin implements EventListener {
     };
 
     private static BuildNameGenerator buildNameGenerator;
-    private static BranchNameGenerator branchNameGenerator;
 
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
     public CucumberScenariooPlugin(String args) {
-        if (buildNameGenerator == null){
-            buildNameGenerator = new DefaultBuildNameGenerator();
-        }
-        if (branchNameGenerator == null){
-            branchNameGenerator = new DefaultBranchNameGenerator();
-        }
-        eventHandler = new CucumberEventHandler(branchNameGenerator.getBranchName(), buildNameGenerator.getBuildName(), "1.0", args);
-    }
 
-    public static void setBuildNameGenerator(BuildNameGenerator generator) {
-        buildNameGenerator = generator;
-    }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(args);
+            CucumberScenariooPluginConfiguration config = null;
+            config = objectMapper.readValue(file, CucumberScenariooPluginConfiguration.class);
 
-    public static void setBranchNameGenerator(BranchNameGenerator generator) {
-        branchNameGenerator = generator;
+            buildNameGenerator = new BuildNameGenerator();
+
+            eventHandler = new CucumberEventHandler(config, buildNameGenerator.getBuildName());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

@@ -6,7 +6,7 @@
 
     <groupId>com.github.andreashosbach</groupId>
     <artifactId>cucumber-scenarioo-plugin</artifactId>
-    <version>0.4.1</version>
+    <version>0.5.0</version>
     <packaging>jar</packaging>
 
     <name>cucumber-scenario-plugin</name>
@@ -53,6 +53,7 @@
         <scenarioo-version>2.1.1</scenarioo-version>
         <gherkin-version>9.0.0</gherkin-version>
         <selenium-version>3.141.59</selenium-version>
+        <jackson-2-version>2.11.0</jackson-2-version>
     </properties>
 
     <dependencies>
@@ -123,6 +124,16 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-2-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-2-version}</version>
+        </dependency>
     </dependencies>
 
     <build>

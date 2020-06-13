@@ -1,0 +1,6 @@
+{
+"outputDirectory": "target/scenarioo/selenium",
+"branchName": "Selenium Features",
+"branchDescription":"Test with Selenium on Wikipedia",
+"revision": "1.0"
+}

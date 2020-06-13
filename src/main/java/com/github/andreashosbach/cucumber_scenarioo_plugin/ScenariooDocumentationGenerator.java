@@ -1,5 +1,6 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin;
 
+import com.github.andreashosbach.cucumber_scenarioo_plugin.configuration.CucumberScenariooPluginConfiguration;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFiles;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.Screenshot;
@@ -36,15 +37,15 @@ public final class ScenariooDocumentationGenerator {
     private Step currentStep;
     private FeatureFile currentFeatureFile;
 
-    public ScenariooDocumentationGenerator(String branchName, String buildName, String revision, String outputDirectory) {
+    public ScenariooDocumentationGenerator(CucumberScenariooPluginConfiguration configuration, String buildName) {
         featureFiles = new FeatureFiles();
-        createOutputDirectory(outputDirectory);
-        writer = new ScenarioDocuWriter(new File(outputDirectory), branchName, buildName);
+        createOutputDirectory(configuration.outputDirectory);
+        writer = new ScenarioDocuWriter(new File(configuration.outputDirectory), configuration.branchName, buildName);
 
-        branch = BranchMapper.mapBranch(branchName);
-        logger.info(String.format("Branch '%s'", branchName));
-        build = BuildMapper.mapBuild(buildName, revision);
-        logger.info(String.format("Bulid '%s', Revivision '%s'", buildName, revision));
+        branch = BranchMapper.mapBranch(configuration.branchName, configuration.branchDescription);
+        logger.info(String.format("Branch '%s'", configuration.branchName));
+        build = BuildMapper.mapBuild(buildName, configuration.revision);
+        logger.info(String.format("Build '%s', Revision '%s'", buildName, configuration.revision));
     }
 
     private void createOutputDirectory(String outputDirectory) {

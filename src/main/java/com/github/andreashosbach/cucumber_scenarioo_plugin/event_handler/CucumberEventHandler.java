@@ -1,6 +1,7 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin.event_handler;
 
 import com.github.andreashosbach.cucumber_scenarioo_plugin.ScenariooDocumentationGenerator;
+import com.github.andreashosbach.cucumber_scenarioo_plugin.configuration.CucumberScenariooPluginConfiguration;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
 import io.cucumber.plugin.event.*;
 
@@ -9,23 +10,19 @@ import java.util.logging.Logger;
 public final class CucumberEventHandler {
     private static final Logger logger = Logger.getGlobal();
 
-    private final String outputDirectory;
-    private final String branchName;
+    private final CucumberScenariooPluginConfiguration configuration;
     private final String buildName;
-    private final String revision;
 
     private ScenariooDocumentationGenerator docGenerator;
 
-    public CucumberEventHandler(String branchName, String buildName, String revision, String outputDirectory) {
-        this.outputDirectory = outputDirectory;
-        this.branchName = branchName;
+    public CucumberEventHandler(CucumberScenariooPluginConfiguration configuration, String buildName) {
+        this.configuration = configuration;
         this.buildName = buildName;
-        this.revision = revision;
     }
 
     //Start of Test
     public void startReport() {
-        docGenerator = new ScenariooDocumentationGenerator(branchName, buildName, revision, outputDirectory);
+        docGenerator = new ScenariooDocumentationGenerator(configuration, buildName);
     }
 
     //End of Test
