@@ -11,5 +11,10 @@
   },
   "stepDetailKeys" : ["Glue Code", "Pattern", "Uri", "Line", "Keyword"],
   "useCaseDetailKeys" : ["Long Description"],
-  "scenarioDetailKeys" : ["Id", "URI", "Line", "Keyword", "Long Description"]
+  "scenarioDetailKeys" : ["Id", "URI", "Line", "Keyword", "Long Description"],
+  "buildName" : {
+    "prefix" : "Testrun-",
+    "datetimeFormat" : "yyyy-MM-dd-hh-mm-ss",
+    "postfix": "-anho"
+  }
 }

@@ -13,4 +13,12 @@ public class CucumberScenariooPluginConfiguration {
     public List<String> stepDetailKeys;
     public List<String> useCaseDetailKeys;
     public List<String> scenarioDetailKeys;
+
+    public BuildNameConfiguration buildName;
+
+    public static class BuildNameConfiguration{
+        public String prefix;
+        public String datetimeFormat;
+        public String postfix;
+    }
 }

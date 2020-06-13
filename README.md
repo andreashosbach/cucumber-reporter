@@ -31,8 +31,17 @@ Create a file in json format with the following data:
         },
         "stepDetailKeys" : ["Glue Code", "Pattern", "URI", "Line", "Keyword"],
         "useCaseDetailKeys" : ["Long Description"],
-        "scenarioDetailKeys" : ["Id", "URI", "Line", "Keyword", "Long Description"]    
+        "scenarioDetailKeys" : ["Id", "URI", "Line", "Keyword", "Long Description"],
+        "buildName" : {
+            "prefix" : "Build-",
+            "datetimeFormat" : "yyyy-MM-dd-hh-mm-ss",
+            "postfix": ""
+        }
     } 
+    
+The field *outputDirectory* is mandatory the other field can be omitted. For the necessary fields like branchName, 
+revision, and build name default values are filled in.
+If the *...DetailKeys* fields are not given, all keys are added.
 
 Within the branch details any number of key value pairs can be added freely.
 
@@ -54,6 +63,8 @@ Possible Values
     * Line
     * Keyword
 
+In *buildName* it is possible to give prefix, date format and postfix for build names.
+
 ### Add the plugin to the Cucumber test runner
 
     @RunWith(Cucumber.class)
@@ -61,7 +72,7 @@ Possible Values
         plugin = "com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin:resources/cucumber_scenarioo_config.json"
     ...)
 
-After the *:* in the plugin configuration give the path to the configuration file.
+The path to the configuration file must follow the  *:* in the plugin configuration.
 
 ### Define an after step hook where you take a screenshot and save it with Screenshot.save(...)
   

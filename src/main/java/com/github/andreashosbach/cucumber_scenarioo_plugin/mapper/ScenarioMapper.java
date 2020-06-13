@@ -2,12 +2,9 @@ package com.github.andreashosbach.cucumber_scenarioo_plugin.mapper;
 
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.DescriptionFormatter;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
-import com.github.andreashosbach.cucumber_scenarioo_plugin.model.GherkinUtils;
 import io.cucumber.plugin.event.TestCase;
 import org.scenarioo.model.docu.entities.Scenario;
 import org.scenarioo.model.docu.entities.generic.Details;
-
-import java.util.UUID;
 
 import static com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin.configuration;
 
