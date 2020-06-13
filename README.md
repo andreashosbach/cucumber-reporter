@@ -22,8 +22,13 @@ Create a file in json format with the following data:
         "outputDirectory": "target/scenarioo/selenium",
         "branchName": "My Branch Name",
         "branchDescription":"My branch description",
+        "branchDetails": {
+            "My key": "My value"
+        },
         "revision": "1.0"
     } 
+
+Within the branch details any number of key value pairs can be added freely.
 
 ### Add the plugin to the Cucumber test runner
 

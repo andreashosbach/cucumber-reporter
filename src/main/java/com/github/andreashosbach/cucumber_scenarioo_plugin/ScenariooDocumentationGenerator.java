@@ -42,7 +42,7 @@ public final class ScenariooDocumentationGenerator {
         createOutputDirectory(configuration.outputDirectory);
         writer = new ScenarioDocuWriter(new File(configuration.outputDirectory), configuration.branchName, buildName);
 
-        branch = BranchMapper.mapBranch(configuration.branchName, configuration.branchDescription);
+        branch = BranchMapper.mapBranch(configuration.branchName, configuration.branchDescription, configuration.branchDetails);
         logger.info(String.format("Branch '%s'", configuration.branchName));
         build = BuildMapper.mapBuild(buildName, configuration.revision);
         logger.info(String.format("Build '%s', Revision '%s'", buildName, configuration.revision));
