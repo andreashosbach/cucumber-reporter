@@ -36,7 +36,6 @@ public class StepMapper {
                             .collect(Collectors.joining("|", "|", "|")))
                     .collect(Collectors.joining("\n"));
             details.addDetail("Data Table", DescriptionFormatter.convertMarkdownToHtml("```\n" + markdownTable + "\n```"));
-            System.out.println(markdownTable);
         }
         return step;
     }
