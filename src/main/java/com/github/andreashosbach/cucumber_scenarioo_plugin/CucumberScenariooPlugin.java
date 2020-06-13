@@ -71,6 +71,7 @@ public final class CucumberScenariooPlugin implements EventListener {
     };
 
     private static BuildNameGenerator buildNameGenerator;
+    private static CucumberScenariooPluginConfiguration configuration;
 
     @SuppressWarnings("WeakerAccess") // Used by PluginFactory
     public CucumberScenariooPlugin(String args) {
@@ -78,16 +79,18 @@ public final class CucumberScenariooPlugin implements EventListener {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             File file = new File(args);
-            CucumberScenariooPluginConfiguration config = null;
-            config = objectMapper.readValue(file, CucumberScenariooPluginConfiguration.class);
+            configuration = objectMapper.readValue(file, CucumberScenariooPluginConfiguration.class);
 
             buildNameGenerator = new BuildNameGenerator();
 
-            eventHandler = new CucumberEventHandler(config, buildNameGenerator.getBuildName());
+            eventHandler = new CucumberEventHandler(buildNameGenerator.getBuildName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public static CucumberScenariooPluginConfiguration configuration(){
+        return configuration;
     }
 
     @Override

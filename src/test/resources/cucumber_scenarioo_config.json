@@ -3,7 +3,13 @@
   "branchName": "Selenium Features",
   "branchDescription": "Test with Selenium on Wikipedia",
   "branchDetails": {
-    "tester": "Pilgrim"
+    "BranchDetail": "Branch Detail"
   },
-  "revision": "1.0"
+  "revision": "1.0",
+  "buildDetails": {
+    "Build Detail": "Build Detail"
+  },
+  "stepDetailKeys" : ["Glue Code", "Pattern", "Uri", "Line", "Keyword"],
+  "useCaseDetailKeys" : ["Long Description"],
+  "scenarioDetailKeys" : ["Id", "URI", "Line", "Keyword", "Long Description"]
 }

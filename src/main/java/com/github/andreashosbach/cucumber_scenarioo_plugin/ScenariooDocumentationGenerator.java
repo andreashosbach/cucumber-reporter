@@ -1,6 +1,5 @@
 package com.github.andreashosbach.cucumber_scenarioo_plugin;
 
-import com.github.andreashosbach.cucumber_scenarioo_plugin.configuration.CucumberScenariooPluginConfiguration;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFile;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.FeatureFiles;
 import com.github.andreashosbach.cucumber_scenarioo_plugin.model.Screenshot;
@@ -20,6 +19,8 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import static com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin.configuration;
+
 public final class ScenariooDocumentationGenerator {
     private static final Logger logger = Logger.getGlobal();
 
@@ -37,15 +38,15 @@ public final class ScenariooDocumentationGenerator {
     private Step currentStep;
     private FeatureFile currentFeatureFile;
 
-    public ScenariooDocumentationGenerator(CucumberScenariooPluginConfiguration configuration, String buildName) {
+    public ScenariooDocumentationGenerator(String buildName) {
         featureFiles = new FeatureFiles();
-        createOutputDirectory(configuration.outputDirectory);
-        writer = new ScenarioDocuWriter(new File(configuration.outputDirectory), configuration.branchName, buildName);
+        createOutputDirectory(configuration().outputDirectory);
+        writer = new ScenarioDocuWriter(new File(configuration().outputDirectory), configuration().branchName, buildName);
 
-        branch = BranchMapper.mapBranch(configuration.branchName, configuration.branchDescription, configuration.branchDetails);
-        logger.info(String.format("Branch '%s'", configuration.branchName));
-        build = BuildMapper.mapBuild(buildName, configuration.revision);
-        logger.info(String.format("Build '%s', Revision '%s'", buildName, configuration.revision));
+        branch = BranchMapper.mapBranch();
+        logger.info(String.format("Branch '%s'", configuration().branchName));
+        build = BuildMapper.mapBuild(buildName);
+        logger.info(String.format("Build '%s', Revision '%s'", buildName, configuration().revision));
     }
 
     private void createOutputDirectory(String outputDirectory) {

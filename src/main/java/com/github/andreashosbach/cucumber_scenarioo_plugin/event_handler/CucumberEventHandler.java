@@ -10,19 +10,17 @@ import java.util.logging.Logger;
 public final class CucumberEventHandler {
     private static final Logger logger = Logger.getGlobal();
 
-    private final CucumberScenariooPluginConfiguration configuration;
     private final String buildName;
 
     private ScenariooDocumentationGenerator docGenerator;
 
-    public CucumberEventHandler(CucumberScenariooPluginConfiguration configuration, String buildName) {
-        this.configuration = configuration;
+    public CucumberEventHandler(String buildName) {
         this.buildName = buildName;
     }
 
     //Start of Test
     public void startReport() {
-        docGenerator = new ScenariooDocumentationGenerator(configuration, buildName);
+        docGenerator = new ScenariooDocumentationGenerator(buildName);
     }
 
     //End of Test

@@ -5,14 +5,16 @@ import org.scenarioo.model.docu.entities.generic.Details;
 
 import java.util.Map;
 
+import static com.github.andreashosbach.cucumber_scenarioo_plugin.CucumberScenariooPlugin.configuration;
+
 public class BranchMapper {
-    public static Branch mapBranch(String name, String branchDescription, Map<String, String> detailsMap) {
+    public static Branch mapBranch() {
         Branch branch = new Branch();
-        branch.setName(name);
-        branch.setDescription(branchDescription);
-        if (detailsMap != null) {
+        branch.setName(configuration().branchName);
+        branch.setDescription(configuration().branchDescription);
+        if (configuration().branchDetails != null) {
             Details details = new Details();
-            for (Map.Entry<String, String> entry : detailsMap.entrySet()) {
+            for (Map.Entry<String, String> entry : configuration().branchDetails.entrySet()) {
                 details.addDetail(entry.getKey(), entry.getValue());
             }
             branch.setDetails(details);

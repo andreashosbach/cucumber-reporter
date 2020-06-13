@@ -26,9 +26,33 @@ Create a file in json format with the following data:
             "My key": "My value"
         },
         "revision": "1.0"
+        "buildDetails": {
+            "My Key": "My value"
+        },
+        "stepDetailKeys" : ["Glue Code", "Pattern", "URI", "Line", "Keyword"],
+        "useCaseDetailKeys" : ["Long Description"],
+        "scenarioDetailKeys" : ["Id", "URI", "Line", "Keyword", "Long Description"]    
     } 
 
 Within the branch details any number of key value pairs can be added freely.
+
+On Use Case, Scenario and Step level the lists are configuring which details are included.
+
+Possible Values
+* Use Case
+    * Long Description
+* Scenario
+    * Id
+    * URI
+    * Line
+    * Keyword
+    * Long Description
+* Step
+    * Glue Code
+    * Pattern
+    * URI
+    * Line
+    * Keyword
 
 ### Add the plugin to the Cucumber test runner
 
