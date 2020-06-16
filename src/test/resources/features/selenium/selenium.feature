@@ -42,6 +42,8 @@ Feature: Checking on Wikipedia
     Then the website with title "Passerine - Wikipedia" should be displayed
 
 
+  Rule: Additional scenarios
+
   Scenario: With a table
     Given Dummy step with table
       | h1  | h2 | h3 |
