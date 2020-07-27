@@ -1,3 +1,5 @@
+![CSP_Logo](CSP_Logo_small.png "Logo")
+
 # cucumber-scenarioo-plugin
 
 *Generate Scenarioo documentation from cucumber tests.*
