@@ -53,7 +53,7 @@
         <scenarioo-version>2.1.1</scenarioo-version>
         <gherkin-version>13.0.0</gherkin-version>
         <selenium-version>3.141.59</selenium-version>
-        <jackson-2-version>2.11.0</jackson-2-version>
+        <jackson-2-version>2.12.6.1</jackson-2-version>
     </properties>
 
     <dependencies>
